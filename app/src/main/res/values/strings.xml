@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">Lab14</string>
+    <string name="link">https://m2.material.io/components/cards</string>
+    <string name="date_send">16.05.22 12:00</string>
+    <string name="offline_status">Offline</string>
+    <string name="invitation">Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании.</string>
+    <string name="default_text">Lydia Westervelt</string>
+    <string name="sample">11.05.22 11:21</string>
+    <string name="avatar_description">Аватар</string>
+    <string name="menu_description">Меню</string>
+    <string name="avatar_text">L</string>
 </resources>

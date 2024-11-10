@@ -5,12 +5,12 @@ plugins {
 
 android {
     namespace = "com.eltex.lab14"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.eltex.lab14"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -27,11 +27,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_18
+        targetCompatibility = JavaVersion.VERSION_18
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "18"
     }
 }
 
