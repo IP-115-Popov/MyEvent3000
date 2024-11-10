@@ -7,4 +7,6 @@ interface PostRepository {
     fun getPost(): Flow<Post>
 
     fun like()
+
+    fun participate()
 }

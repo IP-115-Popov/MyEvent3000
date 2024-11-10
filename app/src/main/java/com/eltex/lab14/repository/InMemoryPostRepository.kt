@@ -8,18 +8,25 @@ import kotlinx.coroutines.flow.update
 
 class InMemoryPostRepository : PostRepository {
 
-    private  val _state = MutableStateFlow(
-         Post(
+    private val _state = MutableStateFlow(
+        Post(
             author = "Sergey",
             content = "Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании.",
             published = "11.05.22 11:21",
-         )
+        )
     )
+
     override fun getPost(): Flow<Post> = _state.asStateFlow()
 
     override fun like() {
         _state.update {
             it.copy(likedByMe = !it.likedByMe)
+        }
+    }
+
+    override fun participate() {
+        _state.update {
+            it.copy(visitByMe = !it.visitByMe)
         }
     }
 }

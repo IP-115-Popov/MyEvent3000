@@ -8,7 +8,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.eltex.lab14.R
 import com.eltex.lab14.data.Post
 import com.eltex.lab14.databinding.ActivityMainBinding
-import com.eltex.lab14.presentation.viewmodel.PostViewModel
+import com.eltex.lab14.presentation.viewmodel.EventViewModel
 import com.eltex.lab14.repository.InMemoryPostRepository
 import com.eltex.lab14.utils.toast
 import kotlinx.coroutines.flow.launchIn
@@ -26,19 +26,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-        val viewModel by viewModels<PostViewModel> {
+        val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
-                addInitializer(PostViewModel::class) {
-                    PostViewModel(InMemoryPostRepository())
+                addInitializer(EventViewModel::class) {
+                    EventViewModel(InMemoryPostRepository())
                 }
             }
         }
+
 
         viewModel.state
             .onEach {
                 bindPost(binding, it.post)
             }
             .launchIn(lifecycleScope)
+
 
 
         binding.bthLike.setOnClickListener {
@@ -50,7 +52,7 @@ class MainActivity : AppCompatActivity() {
             toast(R.string.toastNotImplemented, false)
         }
         binding.bthPeopleOutline.setOnClickListener {
-            toast(R.string.toastNotImplemented, true)
+            viewModel.participate()
         }
         binding.imvMenu.setOnClickListener {
             toast(R.string.toastNotImplemented, true)
@@ -72,4 +74,5 @@ private fun bindPost(binding: ActivityMainBinding, post: Post) {
     )
     binding.tvInitial.text = post.author.take(1)
     binding.bthLike.text = if (post.likedByMe) "1" else "0"
+    binding.bthPeopleOutline.text = if (post.visitByMe) "1" else "0"
 }

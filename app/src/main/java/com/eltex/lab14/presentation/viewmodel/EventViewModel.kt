@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
-class PostViewModel(private val repository: PostRepository) : ViewModel() {
+class EventViewModel(private val repository: PostRepository) : ViewModel() {
 
     private val _state = MutableStateFlow(PostState())
-    val state : StateFlow<PostState> = _state.asStateFlow()
+    val state: StateFlow<PostState> = _state.asStateFlow()
 
     init {
         repository.getPost()
@@ -26,5 +26,9 @@ class PostViewModel(private val repository: PostRepository) : ViewModel() {
 
     fun like() {
         repository.like()
+    }
+
+    fun participate() {
+        repository.participate()
     }
 }
