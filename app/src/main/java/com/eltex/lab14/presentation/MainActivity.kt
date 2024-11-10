@@ -1,11 +1,18 @@
 package com.eltex.lab14.presentation
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.eltex.lab14.R
 import com.eltex.lab14.data.Post
 import com.eltex.lab14.databinding.ActivityMainBinding
+import com.eltex.lab14.presentation.viewmodel.PostViewModel
+import com.eltex.lab14.repository.InMemoryPostRepository
 import com.eltex.lab14.utils.toast
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,16 +25,24 @@ class MainActivity : AppCompatActivity() {
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        var post = Post(
-            author = "Sergey",
-            content = "Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании.",
-            published = "11.05.22 11:21",
-        )
-        bindPost(binding, post)
+
+        val viewModel by viewModels<PostViewModel> {
+            viewModelFactory {
+                addInitializer(PostViewModel::class) {
+                    PostViewModel(InMemoryPostRepository())
+                }
+            }
+        }
+
+        viewModel.state
+            .onEach {
+                bindPost(binding, it.post)
+            }
+            .launchIn(lifecycleScope)
+
 
         binding.bthLike.setOnClickListener {
-            post = post.copy(likedByMe = !post.likedByMe)
-            bindPost(binding, post)
+            viewModel.like()
         }
 
 
