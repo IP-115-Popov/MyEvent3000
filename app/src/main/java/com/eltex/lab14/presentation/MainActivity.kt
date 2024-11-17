@@ -9,7 +9,7 @@ import com.eltex.lab14.R
 import com.eltex.lab14.data.Post
 import com.eltex.lab14.databinding.ActivityMainBinding
 import com.eltex.lab14.presentation.viewmodel.EventViewModel
-import com.eltex.lab14.repository.InMemoryPostRepository
+import com.eltex.lab14.repository.InMemoryEventRepository
 import com.eltex.lab14.utils.toast
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
                 addInitializer(EventViewModel::class) {
-                    EventViewModel(InMemoryPostRepository())
+                    EventViewModel(InMemoryEventRepository())
                 }
             }
         }
