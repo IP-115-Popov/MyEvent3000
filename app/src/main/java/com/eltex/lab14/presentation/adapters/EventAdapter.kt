@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.CardEventBinding
 import com.eltex.lab14.databinding.DataHederBinding
+import com.eltex.lab14.presentation.animator.MyAnimator
 
 class EventAdapter(
     private val likeClickListener: (event: Event) -> Unit,
@@ -20,7 +21,8 @@ class EventAdapter(
     private val ITEM_VIEW_TYPE = 1
 
     fun submitMyList(events: List<Event>) {
-        val items = events.groupBy { it.published } // Группируем по дате публикации (или любому другому признаку)
+        val items =
+            events.groupBy { it.published } // Группируем по дате публикации (или любому другому признаку)
         val items2 = mutableListOf<EventItem>()
 
         for ((publishedDate, eventList) in items) {
@@ -41,10 +43,12 @@ class EventAdapter(
                 val binding = DataHederBinding.inflate(layoutInflater, parent, false)
                 HeaderViewHolder(binding)
             }
+
             ITEM_VIEW_TYPE -> {
                 val binding = CardEventBinding.inflate(layoutInflater, parent, false)
                 EventViewHolder(binding)
             }
+
             else -> throw IllegalArgumentException("Unknown viewType")
         }
     }
@@ -74,6 +78,7 @@ class EventAdapter(
             onBindViewHolder(holder, position)
         }
     }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = getItem(position)) {
             is EventItem.Event -> {
@@ -84,17 +89,22 @@ class EventAdapter(
                 // Устанавливаем обработчики кликов в onBindViewHolder
                 eventViewHolder.binding.bthLike.setOnClickListener {
                     likeClickListener(event)
+                    MyAnimator.animationRotate(eventViewHolder.binding.bthLike)
                 }
                 eventViewHolder.binding.bthParticipate.setOnClickListener {
                     participateClickListener(event)
+                    MyAnimator.animationRotate(eventViewHolder.binding.bthParticipate)
                 }
                 eventViewHolder.binding.bthShare.setOnClickListener {
                     shareClickListener()
+                    MyAnimator.animationRotate(eventViewHolder.binding.bthShare)
                 }
                 eventViewHolder.binding.imvMenu.setOnClickListener {
                     menuClickListener()
+                    MyAnimator.animationRotate(eventViewHolder.binding.imvMenu)
                 }
             }
+
             is EventItem.Header -> {
                 val headerViewHolder = holder as HeaderViewHolder
                 headerViewHolder.bind(item.title)
@@ -102,6 +112,7 @@ class EventAdapter(
         }
     }
 }
+
 sealed class EventItem {
     data class Header(val title: String) : EventItem()
     data class Event(val event: com.eltex.lab14.data.Event) : EventItem()
