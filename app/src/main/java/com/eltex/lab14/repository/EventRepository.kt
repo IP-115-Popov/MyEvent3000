@@ -1,12 +1,12 @@
 package com.eltex.lab14.repository
 
-import com.eltex.lab14.data.Post
+import com.eltex.lab14.data.Event
 import kotlinx.coroutines.flow.Flow
 
 interface EventRepository {
-    fun getPost(): Flow<Post>
+    fun getPost(): Flow<List<Event>>
 
-    fun like()
+    fun likeById(id : Long)
 
-    fun participate()
+    fun participateById(id : Long)
 }

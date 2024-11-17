@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".presentation.MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/tv_link"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:autoLink="web"
+            android:text="@string/link"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_content" />
+
+        <TextView
+            android:id="@+id/tv_data"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:text="@string/date_send"
+            app:layout_constraintEnd_toEndOf="@+id/tv_isOnline"
+            app:layout_constraintStart_toStartOf="@+id/tv_isOnline"
+            app:layout_constraintTop_toBottomOf="@+id/tv_isOnline" />
+
+        <TextView
+            android:id="@+id/tv_isOnline"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:maxLines="1"
+            android:text="@string/offline_status"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_data_send" />
+
+        <TextView
+            android:id="@+id/tv_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="16dp"
+            android:text="@string/invitation"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_data" />
+
+        <ImageView
+            android:id="@+id/imv_avatar"
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/avatar_description"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_data_send"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_author"
+            app:srcCompat="@drawable/avatar_background" />
+
+        <TextView
+            android:id="@+id/tv_initial"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/avatar_text"
+            android:textColor="@color/tv_initial_color"
+            android:textSize="16sp"
+            app:autoSizeTextType="none"
+            app:layout_constraintBottom_toBottomOf="@+id/imv_avatar"
+            app:layout_constraintEnd_toEndOf="@+id/imv_avatar"
+            app:layout_constraintStart_toStartOf="@+id/imv_avatar"
+            app:layout_constraintTop_toTopOf="@+id/imv_avatar"
+            tools:text="A" />
+
+        <TextView
+            android:id="@+id/tv_author"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:ellipsize="end"
+            android:maxWidth="236dp"
+            android:maxLines="1"
+            android:text="@string/default_text"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/imv_menu"
+            app:layout_constraintStart_toEndOf="@+id/imv_avatar"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="@tools:sample/lorem[20]" />
+
+        <TextView
+            android:id="@+id/tv_data_send"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/sample"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_author"
+            app:layout_constraintStart_toStartOf="@+id/tv_author"
+            app:layout_constraintTop_toBottomOf="@+id/tv_author"
+            tools:text="11.05.22 11:21" />
+
+        <ImageView
+            android:id="@+id/imv_menu"
+            android:layout_width="@dimen/tool_bar_size"
+            android:layout_height="@dimen/tool_bar_size"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/menu_description"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_data_send"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_author"
+            app:srcCompat="@drawable/baseline_more_vert_24" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bthLike"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="32dp"
+            app:icon="@drawable/like_button"
+            app:iconSize="18dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_link"
+            tools:text="2" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bthShare"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:icon="@drawable/share"
+            app:iconSize="18dp"
+            app:layout_constraintBottom_toBottomOf="@+id/bthLike"
+            app:layout_constraintStart_toEndOf="@id/bthLike"
+            tools:text="2" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bthPeopleOutline"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:flow_horizontalAlign="end"
+            app:icon="@drawable/ic_people_outline"
+            app:iconSize="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/bthShare"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:text="2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
