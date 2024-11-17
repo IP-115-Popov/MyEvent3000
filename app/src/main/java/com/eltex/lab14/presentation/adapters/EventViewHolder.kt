@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.CardEventBinding
 
-class EventViewHolder(private val binding: CardEventBinding) : ViewHolder(binding.root) {
+class EventViewHolder(val binding: CardEventBinding) : ViewHolder(binding.root) {
     fun bind(event: Event) {
         binding.tvAuthor.text = event.author
         binding.tvContent.text = event.content
