@@ -24,7 +24,7 @@ class EventViewHolder(private val binding: CardEventBinding) : ViewHolder(bindin
     }
 
     private fun updateParticipate(participateByMe: Boolean) {
-        binding.bthPeopleOutline.text = if (participateByMe) "1" else "0"
+        binding.bthParticipate.text = if (participateByMe) "1" else "0"
     }
 
     private fun updateLike(likedByMe: Boolean) {

@@ -23,7 +23,7 @@ class EventAdapter(
         binding.bthLike.setOnClickListener {
             likeClickListener(getItem(viewHolder.adapterPosition))
         }
-        binding.bthPeopleOutline.setOnClickListener {
+        binding.bthParticipate.setOnClickListener {
             participateClickListener(getItem(viewHolder.adapterPosition))
         }
         binding.bthShare.setOnClickListener {
