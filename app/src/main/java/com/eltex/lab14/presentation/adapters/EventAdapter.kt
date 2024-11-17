@@ -3,19 +3,16 @@ package com.eltex.lab14.presentation.adapters
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
-import com.eltex.lab14.R
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.CardEventBinding
-import com.eltex.lab14.utils.toast
 
 class EventAdapter(
-    private val likeClickListener: (event : Event) -> Unit,
-    private val participateClickListener: (event : Event) -> Unit,
+    private val likeClickListener: (event: Event) -> Unit,
+    private val participateClickListener: (event: Event) -> Unit,
     private val ShareClickListener: () -> Unit,
     private val MenuClickListener: () -> Unit,
 
-) : ListAdapter<Event, EventViewHolder>(EventItemCallback()) {
+    ) : ListAdapter<Event, EventViewHolder>(EventItemCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -39,9 +36,7 @@ class EventAdapter(
     }
 
     override fun onBindViewHolder(
-        holder: EventViewHolder,
-        position: Int,
-        payloads: MutableList<Any>
+        holder: EventViewHolder, position: Int, payloads: MutableList<Any>
     ) {
         if (payloads.isEmpty()) {
             onBindViewHolder(holder, position)

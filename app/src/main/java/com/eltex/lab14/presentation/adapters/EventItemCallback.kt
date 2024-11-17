@@ -9,11 +9,8 @@ class EventItemCallback : DiffUtil.ItemCallback<Event>() {
     override fun areContentsTheSame(oldItem: Event, newItem: Event): Boolean = oldItem == newItem
 
     override fun getChangePayload(oldItem: Event, newItem: Event): Any? =
-        EventPayload(
-            likedByMe = newItem.likedByMe.takeIf { it != oldItem.likedByMe },
-            participateByMe = newItem.participateByMe.takeIf { it != oldItem.participateByMe }
-        )
-            .takeIf {
+        EventPayload(likedByMe = newItem.likedByMe.takeIf { it != oldItem.likedByMe },
+            participateByMe = newItem.participateByMe.takeIf { it != oldItem.participateByMe }).takeIf {
                 it.isNotEmpty()
             }
 }
