@@ -12,7 +12,7 @@ import com.eltex.lab14.presentation.animator.MyAnimator
 class EventAdapter(
     private val likeClickListener: (event: Event) -> Unit,
     private val participateClickListener: (event: Event) -> Unit,
-    private val shareClickListener: () -> Unit,
+    private val shareClickListener: (event: Event) -> Unit,
     private val menuClickListener: () -> Unit,
 
     ) : ListAdapter<EventItem, RecyclerView.ViewHolder>(EventItemCallback()) {
@@ -96,7 +96,7 @@ class EventAdapter(
                     MyAnimator.animationRotate(eventViewHolder.binding.bthParticipate)
                 }
                 eventViewHolder.binding.bthShare.setOnClickListener {
-                    shareClickListener()
+                    shareClickListener(event)
                     MyAnimator.animationRotate(eventViewHolder.binding.bthShare)
                 }
                 eventViewHolder.binding.imvMenu.setOnClickListener {

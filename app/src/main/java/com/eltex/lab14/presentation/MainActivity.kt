@@ -11,6 +11,7 @@ import com.eltex.lab14.presentation.adapters.EventAdapter
 import com.eltex.lab14.presentation.adapters.OffsetDecoration
 import com.eltex.lab14.presentation.viewmodel.EventViewModel
 import com.eltex.lab14.repository.InMemoryEventRepository
+import com.eltex.lab14.utils.share
 import com.eltex.lab14.utils.toast
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -38,7 +39,7 @@ class MainActivity : AppCompatActivity() {
 
         val adapter = EventAdapter(likeClickListener = { viewModel.likeById(it.id) },
             participateClickListener = { viewModel.participateById(it.id) },
-            shareClickListener = { toast(R.string.toastNotImplemented, false) },
+            shareClickListener = { share(it.content) },
             menuClickListener = { toast(R.string.toastNotImplemented, true) })
 
 
