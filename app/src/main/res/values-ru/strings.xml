@@ -2,4 +2,5 @@
 <resources>
     <string name="toastNotImplemented">Не реализовано (ru)</string>
     <string name="app_not_found">Приложение не найдено</string>
+    <string name="new_post_title">Новый пост</string>
 </resources>

@@ -17,7 +17,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
 
     init {
-        repository.getPost().onEach { events: List<Event> ->
+        repository.getEvent().onEach { events: List<Event> ->
             _uiState.update { it ->
                 it.copy(events = events)
             }
@@ -30,5 +30,9 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     fun participateById(id: Long) {
         repository.participateById(id)
+    }
+
+    fun addEvent(content: String) {
+        repository.addEvent(content)
     }
 }

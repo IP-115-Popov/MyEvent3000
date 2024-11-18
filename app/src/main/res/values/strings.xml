@@ -12,4 +12,7 @@
 
     <string name="toastNotImplemented">Not implemented (default)</string>
     <string name="app_not_found">app not found</string>
+    <string name="new_post_title">New Post</string>
+    <string name="save_post" translatable="false">Save post</string>
+    <string name="content_is_epmty" translatable="false">Content is epmty</string>
 </resources>

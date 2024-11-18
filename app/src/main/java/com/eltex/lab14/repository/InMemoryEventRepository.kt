@@ -8,6 +8,8 @@ import kotlinx.coroutines.flow.update
 
 class InMemoryEventRepository : EventRepository {
 
+    var nextId = 100L
+
     private val _state = MutableStateFlow(List(5) {
         Event(
             id = it.toLong() + 1L,
@@ -24,7 +26,7 @@ class InMemoryEventRepository : EventRepository {
         )
     })
 
-    override fun getPost(): Flow<List<Event>> = _state.asStateFlow()
+    override fun getEvent(): Flow<List<Event>> = _state.asStateFlow()
 
     override fun likeById(id: Long) {
         _state.update {
@@ -46,6 +48,19 @@ class InMemoryEventRepository : EventRepository {
                 } else {
                     event
                 }
+            }
+        }
+    }
+
+    override fun addEvent(content: String) {
+        _state.update { posts ->
+            buildList(capacity = posts.size + 1) {
+                add(
+                    Event(
+                        id = ++nextId, content = content, author = "Student"
+                    )
+                )
+                addAll(posts)
             }
         }
     }
