@@ -32,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
                 addInitializer(EventViewModel::class) {
@@ -104,6 +105,16 @@ class MainActivity : AppCompatActivity() {
         viewModel.uiState.onEach {
             adapter.submitMyList(it.events)
         }.launchIn(lifecycleScope)
+
+
+        if (intent.action == Intent.ACTION_SEND) { // Обязательно проверьте соответствует ли action ожидаемому
+            val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+            intent.removeExtra(Intent.EXTRA_TEXT) // Удаляем, чтобы при повороте экрана снова не открывалась активити
+
+            text?.let{
+                launchNewEventActivityForEdit(-1L, text)
+            }
+        }
 
         applyInserts()
     }
