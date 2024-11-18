@@ -2,20 +2,26 @@ package com.eltex.lab14.presentation.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.eltex.lab14.R
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.CardEventBinding
 import com.eltex.lab14.databinding.DataHederBinding
 import com.eltex.lab14.presentation.animator.MyAnimator
 
 class EventAdapter(
-    private val likeClickListener: (event: Event) -> Unit,
-    private val participateClickListener: (event: Event) -> Unit,
-    private val shareClickListener: (event: Event) -> Unit,
-    private val menuClickListener: () -> Unit,
+    private val listener: EventListener
+) : ListAdapter<EventItem, RecyclerView.ViewHolder>(EventItemCallback()) {
 
-    ) : ListAdapter<EventItem, RecyclerView.ViewHolder>(EventItemCallback()) {
+    interface EventListener {
+        fun likeClickListener(event: Event)
+        fun participateClickListener(event: Event)
+        fun shareClickListener(event: Event)
+        fun menuClickListener()
+        fun onDeleteClickListener(event: Event)
+    }
 
     private val HEADER_VIEW_TYPE = 0
     private val ITEM_VIEW_TYPE = 1
@@ -88,20 +94,33 @@ class EventAdapter(
 
                 // Устанавливаем обработчики кликов в onBindViewHolder
                 eventViewHolder.binding.bthLike.setOnClickListener {
-                    likeClickListener(event)
+                    listener.likeClickListener(event)
                     MyAnimator.animationRotate(eventViewHolder.binding.bthLike)
                 }
                 eventViewHolder.binding.bthParticipate.setOnClickListener {
-                    participateClickListener(event)
+                    listener.participateClickListener(event)
                     MyAnimator.animationRotate(eventViewHolder.binding.bthParticipate)
                 }
                 eventViewHolder.binding.bthShare.setOnClickListener {
-                    shareClickListener(event)
+                    listener.shareClickListener(event)
                     MyAnimator.animationRotate(eventViewHolder.binding.bthShare)
                 }
                 eventViewHolder.binding.imvMenu.setOnClickListener {
-                    menuClickListener()
+                    listener.menuClickListener()
                     MyAnimator.animationRotate(eventViewHolder.binding.imvMenu)
+                    PopupMenu(it.context, it).apply {
+                        inflate(R.menu.post_menu)
+                        setOnMenuItemClickListener { menuItem ->
+                            if (menuItem.itemId == R.id.delete_post) {
+                                listener.onDeleteClickListener(event)
+                                true
+                            } else {
+                                false
+                            }
+                        }
+
+                        show()
+                    }
                 }
             }
 

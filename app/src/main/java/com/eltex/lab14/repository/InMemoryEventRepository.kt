@@ -64,4 +64,12 @@ class InMemoryEventRepository : EventRepository {
             }
         }
     }
+
+    override fun deleteById(id: Long) {
+        _state.update { posts ->
+            posts.filter { post ->
+                post.id != id
+            }
+        }
+    }
 }

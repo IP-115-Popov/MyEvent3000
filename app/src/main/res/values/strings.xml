@@ -15,4 +15,5 @@
     <string name="new_post_title">New Post</string>
     <string name="save_post" translatable="false">Save post</string>
     <string name="content_is_epmty" translatable="false">Content is epmty</string>
+    <string name="delete_post" translatable="false">Delete post</string>
 </resources>

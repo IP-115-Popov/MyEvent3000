@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.eltex.lab14.R
+import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.ActivityMainBinding
 import com.eltex.lab14.presentation.adapters.EventAdapter
 import com.eltex.lab14.presentation.adapters.OffsetDecoration
@@ -16,7 +17,6 @@ import com.eltex.lab14.presentation.ui.EdgeToEdgeHelper
 import com.eltex.lab14.presentation.viewmodel.EventViewModel
 import com.eltex.lab14.repository.InMemoryEventRepository
 import com.eltex.lab14.utils.share
-import com.eltex.lab14.utils.toast
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -40,11 +40,26 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val adapter = EventAdapter(object : EventAdapter.EventListener {
+            override fun likeClickListener(event: Event) {
+                viewModel.likeById(event.id)
+            }
 
-        val adapter = EventAdapter(likeClickListener = { viewModel.likeById(it.id) },
-            participateClickListener = { viewModel.participateById(it.id) },
-            shareClickListener = { share(it.content) },
-            menuClickListener = { toast(R.string.toastNotImplemented, true) })
+            override fun participateClickListener(event: Event) {
+                viewModel.participateById(event.id)
+            }
+
+            override fun shareClickListener(event: Event) {
+                share(event.content)
+            }
+
+            override fun menuClickListener() {}
+
+            override fun onDeleteClickListener(event: Event) {
+                viewModel.deleteById(event.id)
+            }
+
+        })
 
 
         binding.recyclerView.addItemDecoration(OffsetDecoration(resources.getDimensionPixelOffset(R.dimen.list_offset)))

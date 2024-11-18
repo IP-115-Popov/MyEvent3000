@@ -4,10 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.eltex.lab14.R
-import com.eltex.lab14.databinding.ActivityMainBinding
 import com.eltex.lab14.databinding.ActivityNewEventBinding
 import com.eltex.lab14.presentation.ui.EdgeToEdgeHelper
 import com.eltex.lab14.utils.toast
