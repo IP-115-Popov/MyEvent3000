@@ -10,9 +10,9 @@ interface EventRepository {
 
     fun participateById(id: Long)
 
-    fun addEvent(content : String)
+    fun addEvent(content: String)
 
-    fun updateEvent(id: Long, content : String)
+    fun updateEvent(id: Long, content: String)
 
     fun deleteById(id: Long)
 }

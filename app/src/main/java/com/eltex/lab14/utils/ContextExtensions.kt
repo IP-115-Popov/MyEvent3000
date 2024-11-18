@@ -10,16 +10,14 @@ fun Context.toast(@StringRes res: Int, short: Boolean = true) {
     val length = if (short) Toast.LENGTH_SHORT else Toast.LENGTH_LONG
     Toast.makeText(this, getString(res), length).show()
 }
-fun Context.share(text : String) {
+
+fun Context.share(text: String) {
     val intent = Intent.createChooser(
-        Intent(Intent.ACTION_SEND)
-            .putExtra(Intent.EXTRA_TEXT, text)
-            .setType("text/plain"), null
+        Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, text).setType("text/plain"), null
     )
     kotlin.runCatching {
         startActivity(intent)
+    }.onFailure {
+        toast(R.string.app_not_found, false)
     }
-        .onFailure {
-            toast(R.string.app_not_found, false)
-        }
 }

@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.viewModelFactory
+import com.eltex.lab14.Constants
 import com.eltex.lab14.R
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.ActivityMainBinding
@@ -32,7 +33,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
-
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
                 addInitializer(EventViewModel::class) {
@@ -44,22 +44,18 @@ class MainActivity : AppCompatActivity() {
         val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
             val content = it.data?.getStringExtra(Intent.EXTRA_TEXT)
             val id = it.data?.getLongExtra(Intent.EXTRA_INDEX, -1)
-            if (id == -1L || id == null) {
+            if (id == Constants.ID_NON_EXISTENT_EVENT || id == null) {
                 content?.let { viewModel.addEvent(content) }
             } else {
                 content?.let { viewModel.updateEvent(id, content) }
             }
         }
 
-        fun launchNewEventActivity() {
+        fun launchNewEventActivity(
+            id: Long = Constants.ID_NON_EXISTENT_EVENT, newContent: String = ""
+        ) {
             val intentNewEventActivity =
-                Intent(this, NewEventActivity::class.java).putExtra(Intent.EXTRA_INDEX, -1L)
-            launcher.launch(intentNewEventActivity)
-        }
-        fun launchNewEventActivityForEdit(id: Long, newContent : String) {
-            val intentNewEventActivity =
-                Intent(this, NewEventActivity::class.java)
-                    .putExtra(Intent.EXTRA_INDEX, id)
+                Intent(this, NewEventActivity::class.java).putExtra(Intent.EXTRA_INDEX, id)
                     .putExtra(Intent.EXTRA_TEXT, newContent)
             launcher.launch(intentNewEventActivity)
         }
@@ -84,7 +80,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onUpdateClickListener(event: Event) {
-                launchNewEventActivityForEdit(event.id, event.content)
+                launchNewEventActivity(event.id, event.content)
             }
 
         })
@@ -111,8 +107,8 @@ class MainActivity : AppCompatActivity() {
             val text = intent.getStringExtra(Intent.EXTRA_TEXT)
             intent.removeExtra(Intent.EXTRA_TEXT) // Удаляем, чтобы при повороте экрана снова не открывалась активити
 
-            text?.let{
-                launchNewEventActivityForEdit(-1L, text)
+            text?.let {
+                launchNewEventActivity(Constants.ID_NON_EXISTENT_EVENT, text)
             }
         }
 

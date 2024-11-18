@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import com.eltex.lab14.Constants
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.ActivityNewEventBinding
 import com.eltex.lab14.presentation.ui.EdgeToEdgeHelper
@@ -22,12 +23,12 @@ class NewEventActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val id = intent.getLongExtra(Intent.EXTRA_INDEX, -1)
-        val oldContent : String = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
+        val oldContent: String = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
 
         binding.etvContent.setText(Editable.Factory.getInstance().newEditable(oldContent))
 
         binding.toolbar.menu.findItem(R.id.save_post).setOnMenuItemClickListener {
-            if (id == -1L) addEvent()
+            if (id == Constants.ID_NON_EXISTENT_EVENT) addEvent()
             else updatePost(id)
 
             true
@@ -44,9 +45,8 @@ class NewEventActivity : AppCompatActivity() {
         val content = binding.etvContent.text?.toString().orEmpty()
 
         if (content.isNotBlank()) {
-            val intent = Intent()
-                .putExtra(Intent.EXTRA_INDEX, id)
-                .putExtra(Intent.EXTRA_TEXT, content)
+            val intent =
+                Intent().putExtra(Intent.EXTRA_INDEX, id).putExtra(Intent.EXTRA_TEXT, content)
             setResult(RESULT_OK, intent)
             finish()
         } else {
@@ -58,8 +58,7 @@ class NewEventActivity : AppCompatActivity() {
         val content = binding.etvContent.text?.toString().orEmpty()
 
         if (content.isNotBlank()) {
-            val intent = Intent()
-                .putExtra(Intent.EXTRA_INDEX, -1L)
+            val intent = Intent().putExtra(Intent.EXTRA_INDEX, Constants.ID_NON_EXISTENT_EVENT)
                 .putExtra(Intent.EXTRA_TEXT, content)
             setResult(RESULT_OK, intent)
             finish()

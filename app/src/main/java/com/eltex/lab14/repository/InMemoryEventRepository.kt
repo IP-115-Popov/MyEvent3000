@@ -53,11 +53,13 @@ class InMemoryEventRepository : EventRepository {
     }
 
     override fun addEvent(content: String) {
-        _state.update { posts->
+        _state.update { posts ->
             buildList(capacity = posts.size + 1) {
                 add(
                     Event(
-                        id = ++nextId, content = content, author = "Student",
+                        id = ++nextId,
+                        content = content,
+                        author = "Student",
                         published = "10.10.10 2024"
                     )
                 )
