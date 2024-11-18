@@ -2,6 +2,7 @@ package com.eltex.lab14.presentation.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.eltex.lab14.R
@@ -20,15 +21,14 @@ class NewEventActivity : AppCompatActivity() {
         _binding = ActivityNewEventBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.toolbar.menu.findItem(R.id.save_post).setOnMenuItemClickListener {
-            val content = binding.etvContent.text?.toString().orEmpty()
+        val id = intent.getLongExtra(Intent.EXTRA_INDEX, -1)
+        val oldContent : String = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
 
-            if (content.isNotBlank()) {
-                setResult(RESULT_OK, Intent().putExtra(Intent.EXTRA_TEXT, content))
-                finish()
-            } else {
-                toast(R.string.content_is_epmty, false)
-            }
+        binding.etvContent.setText(Editable.Factory.getInstance().newEditable(oldContent))
+
+        binding.toolbar.menu.findItem(R.id.save_post).setOnMenuItemClickListener {
+            if (id == -1L) addEvent()
+            else updatePost(id)
 
             true
         }
@@ -38,6 +38,34 @@ class NewEventActivity : AppCompatActivity() {
         }
 
         applyInserts()
+    }
+
+    private fun updatePost(id: Long) {
+        val content = binding.etvContent.text?.toString().orEmpty()
+
+        if (content.isNotBlank()) {
+            val intent = Intent()
+                .putExtra(Intent.EXTRA_INDEX, id)
+                .putExtra(Intent.EXTRA_TEXT, content)
+            setResult(RESULT_OK, intent)
+            finish()
+        } else {
+            toast(R.string.content_is_epmty, false)
+        }
+    }
+
+    private fun addEvent() {
+        val content = binding.etvContent.text?.toString().orEmpty()
+
+        if (content.isNotBlank()) {
+            val intent = Intent()
+                .putExtra(Intent.EXTRA_INDEX, -1L)
+                .putExtra(Intent.EXTRA_TEXT, content)
+            setResult(RESULT_OK, intent)
+            finish()
+        } else {
+            toast(R.string.content_is_epmty, false)
+        }
     }
 
     private fun applyInserts() {

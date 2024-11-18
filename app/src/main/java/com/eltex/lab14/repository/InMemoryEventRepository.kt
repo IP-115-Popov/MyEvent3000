@@ -53,7 +53,7 @@ class InMemoryEventRepository : EventRepository {
     }
 
     override fun addEvent(content: String) {
-        _state.update { posts ->
+        _state.update { posts->
             buildList(capacity = posts.size + 1) {
                 add(
                     Event(
@@ -61,6 +61,18 @@ class InMemoryEventRepository : EventRepository {
                     )
                 )
                 addAll(posts)
+            }
+        }
+    }
+
+    override fun updateEvent(id: Long, content: String) {
+        _state.update { posts ->
+            posts.map { event ->
+                if (event.id == id) {
+                    event.copy(content = content)
+                } else {
+                    event
+                }
             }
         }
     }

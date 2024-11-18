@@ -40,6 +40,29 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val content = it.data?.getStringExtra(Intent.EXTRA_TEXT)
+            val id = it.data?.getLongExtra(Intent.EXTRA_INDEX, -1)
+            if (id == -1L || id == null) {
+                content?.let { viewModel.addEvent(content) }
+            } else {
+                content?.let { viewModel.updateEvent(id, content) }
+            }
+        }
+
+        fun launchNewEventActivity() {
+            val intentNewEventActivity =
+                Intent(this, NewEventActivity::class.java).putExtra(Intent.EXTRA_INDEX, -1L)
+            launcher.launch(intentNewEventActivity)
+        }
+        fun launchNewEventActivityForEdit(id: Long, newContent : String) {
+            val intentNewEventActivity =
+                Intent(this, NewEventActivity::class.java)
+                    .putExtra(Intent.EXTRA_INDEX, id)
+                    .putExtra(Intent.EXTRA_TEXT, newContent)
+            launcher.launch(intentNewEventActivity)
+        }
+
         val adapter = EventAdapter(object : EventAdapter.EventListener {
             override fun likeClickListener(event: Event) {
                 viewModel.likeById(event.id)
@@ -59,20 +82,21 @@ class MainActivity : AppCompatActivity() {
                 viewModel.deleteById(event.id)
             }
 
+            override fun onUpdateClickListener(event: Event) {
+                launchNewEventActivityForEdit(event.id, event.content)
+            }
+
         })
+
 
 
         binding.recyclerView.addItemDecoration(OffsetDecoration(resources.getDimensionPixelOffset(R.dimen.list_offset)))
         binding.recyclerView.adapter = adapter
 
-        val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            it.data?.getStringExtra(Intent.EXTRA_TEXT)?.let { content ->
-                viewModel.addEvent(content)
-            }
-        }
+
 
         binding.bthNewEvent.setOnClickListener {
-            launcher.launch(Intent(this, NewEventActivity::class.java))
+            launchNewEventActivity()
         }
 
 

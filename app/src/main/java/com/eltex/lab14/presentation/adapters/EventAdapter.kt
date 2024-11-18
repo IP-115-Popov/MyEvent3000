@@ -21,6 +21,7 @@ class EventAdapter(
         fun shareClickListener(event: Event)
         fun menuClickListener()
         fun onDeleteClickListener(event: Event)
+        fun onUpdateClickListener(event: Event)
     }
 
     private val HEADER_VIEW_TYPE = 0
@@ -111,11 +112,18 @@ class EventAdapter(
                     PopupMenu(it.context, it).apply {
                         inflate(R.menu.post_menu)
                         setOnMenuItemClickListener { menuItem ->
-                            if (menuItem.itemId == R.id.delete_post) {
-                                listener.onDeleteClickListener(event)
-                                true
-                            } else {
-                                false
+                            when (menuItem.itemId) {
+                                R.id.delete_post -> {
+                                    listener.onDeleteClickListener(event)
+                                    true
+                                }
+
+                                R.id.update_post -> {
+                                    listener.onUpdateClickListener(event)
+                                    true
+                                }
+
+                                else -> false
                             }
                         }
 

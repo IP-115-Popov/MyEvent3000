@@ -27,7 +27,6 @@
         android:gravity="center"
         android:importantForAutofill="no"
         android:padding="@dimen/common_spacing"
-        android:text="hello"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
