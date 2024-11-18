@@ -57,7 +57,8 @@ class InMemoryEventRepository : EventRepository {
             buildList(capacity = posts.size + 1) {
                 add(
                     Event(
-                        id = ++nextId, content = content, author = "Student"
+                        id = ++nextId, content = content, author = "Student",
+                        published = "10.10.10 2024"
                     )
                 )
                 addAll(posts)
