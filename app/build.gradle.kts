@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.core.ktx)
