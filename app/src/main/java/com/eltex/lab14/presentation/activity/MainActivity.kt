@@ -12,11 +12,12 @@ import com.eltex.lab14.Constants
 import com.eltex.lab14.R
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.ActivityMainBinding
+import com.eltex.lab14.db.AppDb
 import com.eltex.lab14.presentation.adapters.EventAdapter
 import com.eltex.lab14.presentation.adapters.OffsetDecoration
 import com.eltex.lab14.presentation.ui.EdgeToEdgeHelper
 import com.eltex.lab14.presentation.viewmodel.EventViewModel
-import com.eltex.lab14.repository.LocalEventsRepository
+import com.eltex.lab14.repository.SqliteEventsRepository
 import com.eltex.lab14.utils.share
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -36,7 +37,9 @@ class MainActivity : AppCompatActivity() {
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
                 addInitializer(EventViewModel::class) {
-                    EventViewModel(LocalEventsRepository(applicationContext))
+                    EventViewModel(SqliteEventsRepository(
+                        AppDb.getInstance(applicationContext).eventDao
+                    ))
                 }
             }
         }

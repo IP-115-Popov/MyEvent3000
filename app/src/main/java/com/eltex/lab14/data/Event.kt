@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Event(
-    @SerialName("id") val id: Long,
+    @SerialName("id") val id: Long = 0L,
     @SerialName("author") val author: String = "",
     @SerialName("content") val content: String = "",
     @SerialName("published") val published: String = "",
