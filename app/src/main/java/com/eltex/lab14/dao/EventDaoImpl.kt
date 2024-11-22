@@ -5,6 +5,9 @@ import android.database.sqlite.SQLiteDatabase
 import androidx.core.content.contentValuesOf
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.db.EventTable
+import com.eltex.lab14.utils.getBooleanOrThrow
+import com.eltex.lab14.utils.getLongOrThrow
+import com.eltex.lab14.utils.getStringOrThrow
 
 class EventDaoImpl(private val db: SQLiteDatabase) : EventDao {
     override fun getAll(): List<Event> = db.query(
@@ -83,10 +86,10 @@ class EventDaoImpl(private val db: SQLiteDatabase) : EventDao {
 }
 
 private fun Cursor.readEvent(): Event = Event(
-    id = getLong(getColumnIndexOrThrow(EventTable.ID)),
-    content = getString(getColumnIndexOrThrow(EventTable.CONTENT)),
-    author = getString(getColumnIndexOrThrow(EventTable.AUTHOR)),
-    published = getString(getColumnIndexOrThrow(EventTable.PUBLISHED)),
-    likedByMe = getInt(getColumnIndexOrThrow(EventTable.LIKE_BY_ME)) == 1,
-    participateByMe = getInt(getColumnIndexOrThrow(EventTable.PARTICIPATE_BY_ME)) == 1,
+    id = getLongOrThrow(EventTable.ID),
+    content = getStringOrThrow(EventTable.CONTENT),
+    author = getStringOrThrow(EventTable.AUTHOR),
+    published = getStringOrThrow(EventTable.PUBLISHED),
+    likedByMe = getBooleanOrThrow(EventTable.LIKE_BY_ME),
+    participateByMe = getBooleanOrThrow(EventTable.PARTICIPATE_BY_ME),
 )
