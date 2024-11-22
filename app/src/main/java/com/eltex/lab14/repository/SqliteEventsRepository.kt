@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 class SqliteEventsRepository(private val dao: EventDao) : EventRepository {
 
-    private val _state = MutableStateFlow(emptyList<Event>())
+    private val _state = MutableStateFlow(readEvent())
 
     init {
         CoroutineScope(Dispatchers.IO).launch {
