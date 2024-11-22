@@ -2,31 +2,50 @@ package com.eltex.lab14.repository
 
 import android.content.Context
 import androidx.core.content.edit
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
 import com.eltex.lab14.data.Event
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
+
 class LocalEventsRepository(context: Context) : EventRepository {
 
-    val applicationContext = context.applicationContext
+    private val applicationContext = context.applicationContext
+
+    private val prefs =
+        applicationContext.getSharedPreferences(POST_PREFS_FILE, Context.MODE_PRIVATE)
+
+
+    //Проблема applicationContext = null
+    private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = POST_DATA_STORE_FILE)
+
+    private var nextId = 100L
+
+    private val _state = MutableStateFlow(emptyList<Event>())
+
+    init {
+        CoroutineScope(Dispatchers.IO).launch {
+            readEvent()
+        }
+    }
 
     private companion object {
         const val NEXT_ID_KEY = "NEXT_ID_KEY"
-        const val POST_KEY = "POST_KEY"
-        const val POST_FILE = "POST_FILE"
+        const val POST_DATA_STORE_FILE = "POST_DATA_STORE_FILE"
+        const val POST_PREFS_FILE = "POST_PREFS_FILE"
+        val POST_DATA_STORE = stringPreferencesKey("POST_DATA_STORE")
     }
-
-    private val prefs = applicationContext.getSharedPreferences("events", Context.MODE_PRIVATE)
-
-    val postFile = applicationContext.filesDir.resolve(POST_FILE)
-
-    var nextId = 100L
-
-    private val _state = MutableStateFlow(readEvent())
 
     override fun getEvent(): Flow<List<Event>> = _state.asStateFlow()
 
@@ -96,36 +115,30 @@ class LocalEventsRepository(context: Context) : EventRepository {
     }
 
     private fun sync() {
-        prefs.edit {
+        prefs?.edit {
             putLong(NEXT_ID_KEY, nextId)
-//            putString(POST_KEY, Json.encodeToString(_state.value))
         }
-
-
-        postFile.bufferedWriter().use {
-            it.write(Json.encodeToString(_state.value))
+        CoroutineScope(Dispatchers.IO).launch {
+            applicationContext.dataStore.edit { settings ->
+                settings[POST_DATA_STORE] = Json.encodeToString(_state.value)
+            }
         }
     }
 
-    private fun readEvent(): List<Event> {
-        nextId = prefs.getLong(NEXT_ID_KEY, 0L)
-
-
-        return if (postFile.exists()) {
-            postFile.bufferedReader().use {
-                Json.decodeFromString(it.readLine())
-            }
-        } else {
-            emptyList()
+    private suspend fun readEvent() {
+        prefs?.let {
+            nextId = it.getLong(NEXT_ID_KEY, 0L)
         }
 
 
-//        val postsSerialized = prefs.getString(POST_KEY, null)
-//
-//        return if (postsSerialized != null) {
-//            Json.decodeFromString(postsSerialized)
-//        } else {
-//            emptyList()
-//        }
+        applicationContext.dataStore.data.collect { preferences ->
+            val serializableEvents = preferences[POST_DATA_STORE]
+            val events = if (serializableEvents != null) {
+                Json.decodeFromString<List<Event>>(serializableEvents)
+            } else {
+                emptyList()
+            }
+            _state.value = events
+        }
     }
 }
