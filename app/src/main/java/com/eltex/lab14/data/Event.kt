@@ -1,11 +1,14 @@
 package com.eltex.lab14.data
 
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Event(
-    val id: Long,
-    val author: String = "",
-    val content: String = "",
-    val published: String = "",
-    val likedByMe: Boolean = false,
-    val participateByMe: Boolean = false,
+    @SerialName("id") val id: Long,
+    @SerialName("author") val author: String = "",
+    @SerialName("content") val content: String = "",
+    @SerialName("published") val published: String = "",
+    @SerialName("likedByMe") val likedByMe: Boolean = false,
+    @SerialName("participateByMe") val participateByMe: Boolean = false,
 )

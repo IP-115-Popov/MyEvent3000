@@ -1,30 +1,28 @@
 package com.eltex.lab14.repository
 
+import android.content.Context
+import androidx.core.content.edit
 import com.eltex.lab14.data.Event
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
-class InMemoryEventRepository : EventRepository {
+class LocalEventsRepository(context: Context) : EventRepository {
+
+    private companion object {
+        const val NEXT_ID_KEY = "NEXT_ID_KEY"
+        const val POST_KEY = "POST_KEY"
+    }
+
+    private val prefs =
+        context.applicationContext.getSharedPreferences("events", Context.MODE_PRIVATE)
 
     var nextId = 100L
 
-    private val _state = MutableStateFlow(List(5) {
-        Event(
-            id = it.toLong() + 1L,
-            author = "Sergey",
-            content = "#$it Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании.",
-            published = "11.05.22 11:21",
-        )
-    } + List(5) {
-        Event(
-            id = it.toLong() + 1L,
-            author = "Sergey",
-            content = "#$it Приглашаю провести уютный вечер за увлекательными играми! У нас есть несколько вариантов настолок, подходящих для любой компании.",
-            published = "22.11.22 11:21",
-        )
-    })
+    private val _state = MutableStateFlow(readEvent())
 
     override fun getEvent(): Flow<List<Event>> = _state.asStateFlow()
 
@@ -38,6 +36,7 @@ class InMemoryEventRepository : EventRepository {
                 }
             }
         }
+        sync()
     }
 
     override fun participateById(id: Long) {
@@ -50,6 +49,7 @@ class InMemoryEventRepository : EventRepository {
                 }
             }
         }
+        sync()
     }
 
     override fun addEvent(content: String) {
@@ -66,6 +66,7 @@ class InMemoryEventRepository : EventRepository {
                 addAll(posts)
             }
         }
+        sync()
     }
 
     override fun updateEvent(id: Long, content: String) {
@@ -78,6 +79,7 @@ class InMemoryEventRepository : EventRepository {
                 }
             }
         }
+        sync()
     }
 
     override fun deleteById(id: Long) {
@@ -85,6 +87,23 @@ class InMemoryEventRepository : EventRepository {
             posts.filter { post ->
                 post.id != id
             }
+        }
+        sync()
+    }
+
+    private fun sync() {
+        prefs.edit {
+            putLong(NEXT_ID_KEY, nextId)
+            putString(POST_KEY, Json.encodeToString(_state.value))
+        }
+    }
+
+    private fun readEvent(): List<Event> {
+        val postsSerialized = prefs.getString(POST_KEY, null)
+        return if (postsSerialized != null) {
+            Json.decodeFromString(postsSerialized)
+        } else {
+            emptyList()
         }
     }
 }
