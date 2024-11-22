@@ -12,13 +12,17 @@ import kotlinx.serialization.json.Json
 
 class LocalEventsRepository(context: Context) : EventRepository {
 
+    val applicationContext = context.applicationContext
+
     private companion object {
         const val NEXT_ID_KEY = "NEXT_ID_KEY"
         const val POST_KEY = "POST_KEY"
+        const val POST_FILE = "POST_FILE"
     }
 
-    private val prefs =
-        context.applicationContext.getSharedPreferences("events", Context.MODE_PRIVATE)
+    private val prefs = applicationContext.getSharedPreferences("events", Context.MODE_PRIVATE)
+
+    val postFile = applicationContext.filesDir.resolve(POST_FILE)
 
     var nextId = 100L
 
@@ -94,16 +98,34 @@ class LocalEventsRepository(context: Context) : EventRepository {
     private fun sync() {
         prefs.edit {
             putLong(NEXT_ID_KEY, nextId)
-            putString(POST_KEY, Json.encodeToString(_state.value))
+//            putString(POST_KEY, Json.encodeToString(_state.value))
+        }
+
+
+        postFile.bufferedWriter().use {
+            it.write(Json.encodeToString(_state.value))
         }
     }
 
     private fun readEvent(): List<Event> {
-        val postsSerialized = prefs.getString(POST_KEY, null)
-        return if (postsSerialized != null) {
-            Json.decodeFromString(postsSerialized)
+        nextId = prefs.getLong(NEXT_ID_KEY, 0L)
+
+
+        return if (postFile.exists()) {
+            postFile.bufferedReader().use {
+                Json.decodeFromString(it.readLine())
+            }
         } else {
             emptyList()
         }
+
+
+//        val postsSerialized = prefs.getString(POST_KEY, null)
+//
+//        return if (postsSerialized != null) {
+//            Json.decodeFromString(postsSerialized)
+//        } else {
+//            emptyList()
+//        }
     }
 }
