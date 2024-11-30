@@ -12,7 +12,8 @@ material = "1.12.0"
 activity = "1.9.3"
 constraintlayout = "2.2.0"
 lifecycleVersion = "2.8.7"
-
+roomVersion = "2.6.1"
+kspVersion = "2.0.21-1.0.28"
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
@@ -30,4 +31,5 @@ lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-view
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-
+room = { id = "androidx.room", version.ref = "roomVersion" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "kspVersion" }

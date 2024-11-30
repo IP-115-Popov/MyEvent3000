@@ -2,8 +2,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.serialization)
+    alias(libs.plugins.room)
+    alias(libs.plugins.ksp)
 }
-
+room {
+    schemaDirectory("$projectDir/schemas")
+}
 android {
     namespace = "com.eltex.lab14"
     compileSdk = 35
@@ -40,6 +44,10 @@ android {
 }
 
 dependencies {
+    val room_version = "2.6.1"
+    implementation("androidx.room:room-ktx:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lifecycle.viewmodel.ktx)

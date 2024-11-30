@@ -2,57 +2,37 @@ package com.eltex.lab14.repository
 
 import com.eltex.lab14.dao.EventDao
 import com.eltex.lab14.data.Event
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import com.eltex.lab14.entity.EventEntity
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.map
 
 
 class SqliteEventsRepository(private val dao: EventDao) : EventRepository {
 
-    private val _state = MutableStateFlow(readEvent())
-
-    init {
-        CoroutineScope(Dispatchers.IO).launch {
-            readEvent()
-        }
+    override fun getEvent(): Flow<List<Event>> = dao.getAll().map {
+        it.map(EventEntity::toEvent)
     }
-
-    override fun getEvent(): Flow<List<Event>> = _state.asStateFlow()
 
     override fun likeById(id: Long) {
         dao.likeById(id)
-        sync()
     }
 
     override fun participateById(id: Long) {
         dao.participateById(id)
-        sync()
     }
 
     override fun addEvent(content: String) {
-        dao.save(Event(content = content))
-        sync()
+        dao.save(EventEntity.fromEvent(Event(content = content)))
     }
 
-    override fun updateEvent(id: Long, content: String) {
-        _state.value.find { it.id == id }?.let { dao.save(it) }
-        sync()
+    override fun updateContentEvent(id: Long, content: String) {
+        dao.updateContentEvent(id, content)
     }
 
     override fun deleteById(id: Long) {
         dao.deleteById(id)
-        sync()
     }
 
-    private fun sync() {
-        _state.update {
-            readEvent()
-        }
-    }
 
     private fun readEvent() = dao.getAll()
 }
