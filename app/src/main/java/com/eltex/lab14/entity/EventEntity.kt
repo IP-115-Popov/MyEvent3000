@@ -1,11 +1,9 @@
 package com.eltex.lab14.entity
 
-import android.content.Context
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.eltex.lab14.data.Event
-import com.eltex.lab14.db.AppDb
 
 @Entity(tableName = "Events")
 data class EventEntity(

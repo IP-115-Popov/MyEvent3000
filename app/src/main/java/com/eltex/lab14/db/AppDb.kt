@@ -1,7 +1,6 @@
 package com.eltex.lab14.db
 
 import android.content.Context
-import android.database.sqlite.SQLiteDatabase
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
@@ -27,6 +26,7 @@ abstract class AppDb : RoomDatabase() {
                 INSTANCE?.let { return it }
 
                 val appDb = Room.databaseBuilder(application, AppDb::class.java, "appdb")
+                    .createFromAsset("database/appdb.db")
                     .fallbackToDestructiveMigration()
                     .allowMainThreadQueries()
                     .build()
