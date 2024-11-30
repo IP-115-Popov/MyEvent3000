@@ -13,6 +13,7 @@ import com.eltex.lab14.entity.EventEntity
 )
 abstract class AppDb : RoomDatabase() {
     abstract val eventDao: EventDao
+
     companion object {
         @Volatile
         private var INSTANCE: AppDb? = null
@@ -26,10 +27,8 @@ abstract class AppDb : RoomDatabase() {
                 INSTANCE?.let { return it }
 
                 val appDb = Room.databaseBuilder(application, AppDb::class.java, "appdb")
-                    .createFromAsset("database/appdb.db")
-                    .fallbackToDestructiveMigration()
-                    .allowMainThreadQueries()
-                    .build()
+                    .createFromAsset("database/appdb.db").fallbackToDestructiveMigration()
+                    .allowMainThreadQueries().build()
 
                 INSTANCE = appDb
 
