@@ -30,8 +30,7 @@ abstract class AppDb : RoomDatabase() {
 
                 val appDb = Room.databaseBuilder(application, AppDb::class.java, "appdb")
                     .createFromAsset("database/appdb.db").fallbackToDestructiveMigration()
-                    .addMigrations(MIGRATION_1_2)
-                    .addMigrations(MIGRATION_2_3)
+                    .addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3)
                     //.fallbackToDestructiveMigration()
                     .allowMainThreadQueries().build()
 
@@ -40,6 +39,7 @@ abstract class AppDb : RoomDatabase() {
                 return appDb
             }
         }
+
         val MIGRATION_1_2 = object : Migration(1, 2) {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE Events ADD COLUMN aboba INTEGER NOT NULL DEFAULT 0")
