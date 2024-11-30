@@ -18,8 +18,6 @@ data class EventEntity(
     @ColumnInfo("likedByMe") val likedByMe: Boolean = false,
 
     @ColumnInfo("participateByMe") val participateByMe: Boolean = false,
-
-    @ColumnInfo("aboba") val aboba: Boolean = false,
 ) {
     companion object {
         fun fromEvent(event: Event) = with(event) {
