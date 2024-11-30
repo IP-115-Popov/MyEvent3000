@@ -51,9 +51,11 @@ android {
 }
 
 dependencies {
-    val room_version = "2.6.1"
-    implementation("androidx.room:room-ktx:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    implementation(libs.androidx.fragment)
+    implementation(libs.androidx.fragment.ktx)
 
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
