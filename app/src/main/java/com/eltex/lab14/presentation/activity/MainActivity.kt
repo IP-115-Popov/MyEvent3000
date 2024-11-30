@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
 
 
         viewModel.uiState.onEach {
-            adapter.submitMyList(it.events)
+            adapter.submitEventList(it.events)
         }.launchIn(lifecycleScope)
 
 

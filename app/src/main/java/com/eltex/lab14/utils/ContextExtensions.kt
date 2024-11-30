@@ -15,7 +15,7 @@ fun Context.share(text: String) {
     val intent = Intent.createChooser(
         Intent(Intent.ACTION_SEND).putExtra(Intent.EXTRA_TEXT, text).setType("text/plain"), null
     )
-    kotlin.runCatching {
+    runCatching {
         startActivity(intent)
     }.onFailure {
         toast(R.string.app_not_found, false)

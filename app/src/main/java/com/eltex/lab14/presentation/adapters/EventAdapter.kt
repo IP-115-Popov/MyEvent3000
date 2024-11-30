@@ -9,7 +9,7 @@ import com.eltex.lab14.R
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.CardEventBinding
 import com.eltex.lab14.databinding.DataHederBinding
-import com.eltex.lab14.presentation.animator.MyAnimator
+import com.eltex.lab14.presentation.animator.ButtonAnimator
 
 class EventAdapter(
     private val listener: EventListener
@@ -27,19 +27,13 @@ class EventAdapter(
     private val HEADER_VIEW_TYPE = 0
     private val ITEM_VIEW_TYPE = 1
 
-    fun submitMyList(events: List<Event>) {
-        val items =
-            events.groupBy { it.published } // Группируем по дате публикации (или любому другому признаку)
-        val items2 = mutableListOf<EventItem>()
-
-        for ((publishedDate, eventList) in items) {
-            // Добавляем заголовок
-            items2.add(EventItem.Header(publishedDate))
-            // Добавляем все события под этим заголовком
-            items2.addAll(eventList.map { EventItem.Event(it) })
-        }
-
-        submitList(items2)
+    fun submitEventList(events: List<Event>) {
+        val items = events.groupBy { it.published } // Группируем по дате публикации (или любому другому признаку)
+        super.submitList(
+            items.flatMap { (publishedDate, eventList) ->
+                listOf(EventItem.Header(publishedDate)) + eventList.map(EventItem::Event)
+            }
+        )
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -96,19 +90,19 @@ class EventAdapter(
                 // Устанавливаем обработчики кликов в onBindViewHolder
                 eventViewHolder.binding.bthLike.setOnClickListener {
                     listener.likeClickListener(event)
-                    MyAnimator.animationRotate(eventViewHolder.binding.bthLike)
+                    ButtonAnimator.animationRotate(eventViewHolder.binding.bthLike)
                 }
                 eventViewHolder.binding.bthParticipate.setOnClickListener {
                     listener.participateClickListener(event)
-                    MyAnimator.animationRotate(eventViewHolder.binding.bthParticipate)
+                    ButtonAnimator.animationRotate(eventViewHolder.binding.bthParticipate)
                 }
                 eventViewHolder.binding.bthShare.setOnClickListener {
                     listener.shareClickListener(event)
-                    MyAnimator.animationRotate(eventViewHolder.binding.bthShare)
+                    ButtonAnimator.animationRotate(eventViewHolder.binding.bthShare)
                 }
                 eventViewHolder.binding.imvMenu.setOnClickListener {
                     listener.menuClickListener()
-                    MyAnimator.animationRotate(eventViewHolder.binding.imvMenu)
+                    ButtonAnimator.animationRotate(eventViewHolder.binding.imvMenu)
                     PopupMenu(it.context, it).apply {
                         inflate(R.menu.post_menu)
                         setOnMenuItemClickListener { menuItem ->
