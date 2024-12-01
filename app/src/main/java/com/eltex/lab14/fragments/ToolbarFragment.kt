@@ -14,7 +14,6 @@ import com.eltex.lab14.databinding.FragmentToolbarBinding
 import com.eltex.lab14.presentation.viewmodel.ToolbarViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlin.math.truncate
 
 
 class ToolbarFragment : Fragment() {
