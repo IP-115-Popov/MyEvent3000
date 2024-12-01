@@ -36,8 +36,7 @@ class NewPostFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
         val binding = FragmentNewPostBinding.inflate(layoutInflater, container, false)
@@ -54,39 +53,34 @@ class NewPostFragment : Fragment() {
                     NewPostViewModel(
                         SqliteEventsRepository(
                             AppDb.getInstance(requireContext().applicationContext).eventDao
-                        ),
-                        postId
+                        ), postId
                     )
                 }
             }
         }
-        toolbarViewModel.saveClicked.filter { it }
-            .onEach {
-                val content = binding.etvContent.text?.toString().orEmpty()
+        toolbarViewModel.saveClicked.filter { it }.onEach {
+            val content = binding.etvContent.text?.toString().orEmpty()
 
-                if (content.isNotBlank()) {
-                    newPostViewModel.save(content)
-                    findNavController().navigateUp()
-                } else {
-                    requireContext().toast(R.string.content_is_epmty, false)
-                }
-                toolbarViewModel.onSaveClicked(false)
+            if (content.isNotBlank()) {
+                newPostViewModel.save(content)
+                findNavController().navigateUp()
+            } else {
+                requireContext().toast(R.string.content_is_epmty, false)
             }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+            toolbarViewModel.onSaveClicked(false)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewLifecycleOwner.lifecycle.addObserver(
-            object : LifecycleEventObserver {
-                override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
-                    when (event){
-                        Lifecycle.Event.ON_START -> toolbarViewModel.setSaveVisible(true)
+        viewLifecycleOwner.lifecycle.addObserver(object : LifecycleEventObserver {
+            override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
+                when (event) {
+                    Lifecycle.Event.ON_START -> toolbarViewModel.setSaveVisible(true)
 
-                        Lifecycle.Event.ON_STOP -> toolbarViewModel.setSaveVisible(false)
-                        Lifecycle.Event.ON_DESTROY -> source.lifecycle.removeObserver(this)
-                        else -> Unit
-                    }
+                    Lifecycle.Event.ON_STOP -> toolbarViewModel.setSaveVisible(false)
+                    Lifecycle.Event.ON_DESTROY -> source.lifecycle.removeObserver(this)
+                    else -> Unit
                 }
             }
-        )
+        })
 //        val id = intent.getLongExtra(Intent.EXTRA_INDEX, -1)
 //        val oldContent: String = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
 //

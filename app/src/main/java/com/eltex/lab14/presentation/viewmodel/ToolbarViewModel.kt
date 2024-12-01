@@ -15,6 +15,7 @@ class ToolbarViewModel : ViewModel() {
     fun setSaveVisible(visible: Boolean) {
         _saveVisible.value = visible
     }
+
     fun onSaveClicked(pending: Boolean) {
         _saveClicked.value = pending
     }

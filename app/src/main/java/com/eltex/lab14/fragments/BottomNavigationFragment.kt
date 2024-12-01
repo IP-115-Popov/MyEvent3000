@@ -21,7 +21,7 @@ class BottomNavigationFragment : Fragment() {
 
 
         val postClickListener = View.OnClickListener {
-           findNavController().navigate(R.id.action_bottomNavigationFragment_to_newPostFragment)
+            findNavController().navigate(R.id.action_bottomNavigationFragment_to_newPostFragment)
         }
         val eventClickListener = View.OnClickListener {
             //navController.navigate(R.id.action_bottomNavigationFragment_to_newPostFragment)
@@ -33,17 +33,15 @@ class BottomNavigationFragment : Fragment() {
             when (destination.id) {
                 R.id.postFragment -> {
                     binding.newEvent.setOnClickListener(postClickListener)
-                    binding.newEvent.animate()
-                        .scaleX(1F)
-                        .scaleY(1F)
+                    binding.newEvent.animate().scaleX(1F).scaleY(1F)
                 }
 
                 R.id.eventFragment -> {
-                   //binding.newEvent
+                    //binding.newEvent
                 }
 
                 R.id.userFragment -> {
-                   // binding.newUser
+                    // binding.newUser
                 }
             }
         }

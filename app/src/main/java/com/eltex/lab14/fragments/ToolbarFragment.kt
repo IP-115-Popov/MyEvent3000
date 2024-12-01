@@ -35,8 +35,7 @@ class ToolbarFragment : Fragment() {
 
         toolbarViewModel.saveVisible.onEach {
             newPostItem.isVisible = it
-        }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         newPostItem.setOnMenuItemClickListener {
             toolbarViewModel.onSaveClicked(true)
