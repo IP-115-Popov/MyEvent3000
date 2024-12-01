@@ -17,4 +17,9 @@
     <string name="content_is_epmty" translatable="false">Content is epmty</string>
     <string name="delete_post" translatable="false">Delete post</string>
     <string name="update_post" translatable="false">Update post</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="bottom_menu_posts">Posts</string>
+    <string name="bottom_menu_events">Events</string>
+    <string name="bottom_menu_users">Users</string>
 </resources>

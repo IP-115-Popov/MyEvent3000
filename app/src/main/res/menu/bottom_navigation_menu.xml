@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/postFragment"
+        android:icon="@drawable/ic_wifi"
+        android:title="@string/bottom_menu_posts" />
+    <item
+        android:id="@+id/eventFragment"
+        android:icon="@drawable/ic_calender"
+        android:title="@string/bottom_menu_events" />
+    <item
+        android:id="@+id/userFragment"
+        android:icon="@drawable/ic_people"
+        android:title="@string/bottom_menu_users" />
+</menu>
