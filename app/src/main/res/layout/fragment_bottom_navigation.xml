@@ -9,10 +9,9 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container"
-        android:name="com.eltex.lab14.fragments.BottomNavigationFragment"
-        android:layout_width="match_parent"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_weight="1"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavigation"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,7 +20,7 @@
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigation"
-        app:layout_constraintTop_toTopOf="container"
+        app:layout_constraintTop_toBottomOf="@id/container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

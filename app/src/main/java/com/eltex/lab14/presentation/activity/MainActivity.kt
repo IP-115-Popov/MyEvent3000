@@ -37,12 +37,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 //                launchNewEventActivity(Constants.ID_NON_EXISTENT_EVENT, text)
 //            }
 //        }
-
+        enableEdgeToEdge()
         applyInserts()
     }
 
     private fun applyInserts() {
-        enableEdgeToEdge()
-        EdgeToEdgeHelper.enableEdgeToEdge(findViewById(android.R.id.content))
+        EdgeToEdgeHelper.enableEdgeToEdge(findViewById(R.id.container))
     }
 }

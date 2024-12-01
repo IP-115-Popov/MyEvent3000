@@ -15,11 +15,12 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/container"
-        app:defaultNavHost ="true"
-        app:navGraph = "@navigation/root_navigation"
         android:layout_width="match_parent"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_weight="1"
+        app:defaultNavHost ="true"
+        app:navGraph = "@navigation/root_navigation" />
 
 
 </LinearLayout>

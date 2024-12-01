@@ -9,6 +9,6 @@
     <fragment
         android:id="@+id/bottomNavigationFragment"
         android:name="com.eltex.lab14.fragments.BottomNavigationFragment"
-        android:label="fragment_toolbar"
-        tools:layout="@layout/fragment_toolbar" />
+        android:label="fragment_bottom_navigatio"
+        tools:layout="@layout/fragment_bottom_navigation" />
 </navigation>
