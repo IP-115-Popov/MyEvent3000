@@ -9,8 +9,7 @@ class NewPostViewModel(
 ) : ViewModel() {
 
     fun save(content: String) {
-        if (id != 0L) repository.updateContentEvent(id, content)
-        else repository.addEvent(content)
+        repository.save(id, content)
     }
 
 }
