@@ -9,6 +9,15 @@
     <fragment
         android:id="@+id/bottomNavigationFragment"
         android:name="com.eltex.lab14.fragments.BottomNavigationFragment"
-        android:label="fragment_bottom_navigatio"
-        tools:layout="@layout/fragment_bottom_navigation" />
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_bottom_navigation" >
+        <action
+            android:id="@+id/action_bottomNavigationFragment_to_newPostFragment"
+            app:destination="@id/newPostFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/newPostFragment"
+        android:name="com.eltex.lab14.fragments.NewPostFragment"
+        android:label="@string/created_post"
+        tools:layout="@layout/fragment_new_post"/>
 </navigation>

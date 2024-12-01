@@ -1,6 +1,5 @@
 package com.eltex.lab14.fragments
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
@@ -17,7 +15,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.eltex.lab14.Constants
 import com.eltex.lab14.R
 import com.eltex.lab14.data.Event
-import com.eltex.lab14.databinding.ActivityMainBinding
 import com.eltex.lab14.databinding.FragmentPostBinding
 import com.eltex.lab14.db.AppDb
 import com.eltex.lab14.presentation.activity.NewEventActivity
@@ -25,8 +22,6 @@ import com.eltex.lab14.presentation.adapters.EventAdapter
 import com.eltex.lab14.presentation.adapters.OffsetDecoration
 import com.eltex.lab14.presentation.viewmodel.EventViewModel
 import com.eltex.lab14.repository.SqliteEventsRepository
-import com.eltex.lab14.utils.share
-import com.eltex.lab14.utils.toast
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -38,7 +33,7 @@ class PostFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
 
-        val binding = FragmentPostBinding.inflate(layoutInflater, container, false)
+        val binding = FragmentPostBinding.inflate(inflater, container, false)
 
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {

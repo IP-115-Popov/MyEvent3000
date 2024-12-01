@@ -22,4 +22,5 @@
     <string name="bottom_menu_posts">Posts</string>
     <string name="bottom_menu_events">Events</string>
     <string name="bottom_menu_users">Users</string>
+    <string name="created_post">Created Post</string>
 </resources>
