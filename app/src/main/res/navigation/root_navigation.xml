@@ -24,9 +24,5 @@
         android:id="@+id/postFragment"
         android:name="com.eltex.lab14.fragments.PostFragment"
         android:label="PostFragment"
-        tools:layout="@layout/fragment_post">
-        <action
-            android:id="@+id/action_postFragment_to_newPostFragment"
-            app:destination="@id/newPostFragment" />
-    </fragment>
+        tools:layout="@layout/fragment_post" />
 </navigation>

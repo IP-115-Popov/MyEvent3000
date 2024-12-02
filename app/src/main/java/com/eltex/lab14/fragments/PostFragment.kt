@@ -47,8 +47,6 @@ class PostFragment : Fragment() {
         }
 
 
-
-
         val adapter = EventAdapter(object : EventAdapter.EventListener {
             override fun likeClickListener(event: Event) {
                 viewModel.likeById(event.id)
@@ -70,8 +68,7 @@ class PostFragment : Fragment() {
 
             override fun onUpdateClickListener(event: Event) {
                 requireParentFragment().requireParentFragment().findNavController().navigate(
-                    R.id.action_bottomNavigationFragment_to_newPostFragment,
-                    bundleOf(
+                    R.id.action_bottomNavigationFragment_to_newPostFragment, bundleOf(
                         NewPostFragment.POST_ID to event.id,
                         NewPostFragment.CONTENT to event.content,
                     )
