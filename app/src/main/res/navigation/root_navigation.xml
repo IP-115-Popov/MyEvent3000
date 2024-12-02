@@ -20,4 +20,13 @@
         android:name="com.eltex.lab14.fragments.NewPostFragment"
         android:label="@string/created_post"
         tools:layout="@layout/fragment_new_post" />
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.eltex.lab14.fragments.PostFragment"
+        android:label="PostFragment"
+        tools:layout="@layout/fragment_post">
+        <action
+            android:id="@+id/action_postFragment_to_newPostFragment"
+            app:destination="@id/newPostFragment" />
+    </fragment>
 </navigation>

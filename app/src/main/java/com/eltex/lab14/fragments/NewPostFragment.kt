@@ -30,6 +30,7 @@ class NewPostFragment : Fragment() {
 
     companion object {
         const val POST_ID = "POST_ID"
+        const val CONTENT = "CONTENT"
     }
 
     override fun onCreateView(
@@ -41,6 +42,9 @@ class NewPostFragment : Fragment() {
         val toolbarViewModel by activityViewModels<ToolbarViewModel>()
 
         val postId = arguments?.getLong(POST_ID) ?: 0L
+        val content = arguments?.getString(CONTENT) ?: ""
+
+        binding.etvContent.setText(content)
 
         val newPostViewModel by viewModels<NewPostViewModel> {
             viewModelFactory {
