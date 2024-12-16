@@ -29,9 +29,9 @@ abstract class AppDb : RoomDatabase() {
                 INSTANCE?.let { return it }
 
                 val appDb = Room.databaseBuilder(application, AppDb::class.java, "appdb")
-                    .createFromAsset("database/appdb.db").fallbackToDestructiveMigration()
+                    .createFromAsset("database/init.db")
+                    .fallbackToDestructiveMigration()
                     .addMigrations(MIGRATION_1_2).addMigrations(MIGRATION_2_3)
-                    //.fallbackToDestructiveMigration()
                     .allowMainThreadQueries().build()
 
                 INSTANCE = appDb

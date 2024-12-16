@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -20,6 +22,16 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+
+        val secretProps = rootDir.resolve("secrets.properties")
+            .bufferedReader()
+            .use {
+                Properties().apply {
+                    load(it)
+                }
+            }
+        buildConfigField("String", "API_KEY", secretProps.getProperty("API_KEY"))
     }
 
     buildTypes {
@@ -40,6 +52,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
     sourceSets {
         getByName("main") {
