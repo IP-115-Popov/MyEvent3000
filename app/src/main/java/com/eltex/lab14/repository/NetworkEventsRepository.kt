@@ -215,7 +215,7 @@ class NetworkEventsRepository() : EventRepository {
     }
 
     override fun save(id: Long, content: String, callback: Callback<Event>) {
-        val a = json.encodeToString(Event(content = content, datetime = "2024-12-18T16:07:31.146Z")).toRequestBody(jsonType)
+        val a = json.encodeToString(Event(id = id, content = content, datetime = "2024-12-18T16:07:31.146Z")).toRequestBody(jsonType)
         val call = client.newCall(
             Request.Builder()
                 .url("https://eltex-android.ru/api/events")
