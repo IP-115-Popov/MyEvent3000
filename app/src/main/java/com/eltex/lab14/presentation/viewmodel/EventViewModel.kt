@@ -39,7 +39,42 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     }
 
     fun likeById(id: Long) {
-        TODO()
+        uiState.value.events?.find { it.id == id }?.let {
+            when (it.likedByMe) {
+                true -> {
+                    repository.deleteLikeById(id, object : Callback<Event> {
+                        override fun onSuccess(data: Event) {
+                            _uiState.update {
+                                load()
+                                it.copy(
+                                    status = Status.Idle,
+                                )
+                            }
+                        }
+
+                        override fun onError(exception: java.lang.Exception) {
+                            _uiState.update { it.copy(status = Status.Error(exception)) }
+                        }
+                    } )
+                }
+                false -> {
+                    repository.likeById(id, object : Callback<Event> {
+                        override fun onSuccess(data: Event) {
+                            _uiState.update {
+                                load()
+                                it.copy(
+                                    status = Status.Idle,
+                                )
+                            }
+                        }
+
+                        override fun onError(exception: java.lang.Exception) {
+                            _uiState.update { it.copy(status = Status.Error(exception)) }
+                        }
+                    } )
+                }
+            }
+        }
     }
 
     fun participateById(id: Long) {

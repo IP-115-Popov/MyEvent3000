@@ -83,7 +83,69 @@ class NetworkEventsRepository() : EventRepository {
     }
 
     override fun likeById(id: Long, callback: Callback<Event>) {
-        TODO("Not yet implemented")
+        val call = client.newCall(
+            Request.Builder()
+                .url("https://eltex-android.ru/api/posts/$id/likes")
+                .post(json.encodeToString(Event(id=id, likedByMe = false)).toRequestBody(jsonType))
+                .build()
+        )
+
+        call.enqueue(
+            object : okhttp3.Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        try {
+                            callback.onSuccess(
+                                json.decodeFromString(requireNotNull(response.body).string())
+                            )
+                        } catch (e: Exception) {
+                            callback.onError(e)
+                        }
+
+                    } else {
+                        callback.onError(RuntimeException("Response code is ${response.code}"))
+
+                    }
+                }
+            }
+        )
+    }
+
+    override fun deleteLikeById(id: Long, callback: Callback<Event>) {
+        val call = client.newCall(
+            Request.Builder()
+                .url("https://eltex-android.ru/api/posts/$id/likes")
+                .delete(json.encodeToString(Event(id=id, likedByMe = false)).toRequestBody(jsonType))
+                .build()
+        )
+
+        call.enqueue(
+            object : okhttp3.Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        try {
+                            callback.onSuccess(
+                                json.decodeFromString(requireNotNull(response.body).string())
+                            )
+                        } catch (e: Exception) {
+                            callback.onError(e)
+                        }
+
+                    } else {
+                        callback.onError(RuntimeException("Response code is ${response.code}"))
+
+                    }
+                }
+            }
+        )
     }
 
     override fun participateById(id: Long, callback: Callback<Event>) {

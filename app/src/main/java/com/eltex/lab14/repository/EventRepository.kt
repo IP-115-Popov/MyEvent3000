@@ -13,4 +13,6 @@ interface EventRepository {
     fun save(id: Long, content: String, callback: Callback<Event>)
 
     fun deleteById(id: Long, callback: Callback<Unit>)
+
+    fun deleteLikeById(id: Long, callback: Callback<Event>)
 }
