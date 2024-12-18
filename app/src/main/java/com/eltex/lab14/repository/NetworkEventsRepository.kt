@@ -73,7 +73,7 @@ class NetworkEventsRepository() : EventRepository {
     override fun likeById(id: Long, callback: Callback<Event>) {
         val call = client.newCall(
             Request.Builder().url("https://eltex-android.ru/api/events/$id/likes").post(
-                json.encodeToString(Event(id = id, likedByMe = false)).toRequestBody(jsonType)
+                "".toRequestBody(jsonType)
             ).build()
         )
 
@@ -103,7 +103,7 @@ class NetworkEventsRepository() : EventRepository {
     override fun deleteLikeById(id: Long, callback: Callback<Event>) {
         val call = client.newCall(
             Request.Builder().url("https://eltex-android.ru/api/events/$id/likes").delete(
-                json.encodeToString(Event(id = id, likedByMe = false)).toRequestBody(jsonType)
+                "".toRequestBody(jsonType)
             ).build()
         )
 
@@ -133,7 +133,7 @@ class NetworkEventsRepository() : EventRepository {
     override fun participateById(id: Long, callback: Callback<Event>) {
         val call = client.newCall(
             Request.Builder().url("https://eltex-android.ru/api/events/$id/participants").post(
-                json.encodeToString(Event(id = id, participateByMe = true)).toRequestBody(jsonType)
+                "".toRequestBody(jsonType)
             ).build()
         )
 
@@ -163,7 +163,7 @@ class NetworkEventsRepository() : EventRepository {
     override fun deleteParticipateById(id: Long, callback: Callback<Event>) {
         val call = client.newCall(
             Request.Builder().url("https://eltex-android.ru/api/events/$id/participants").delete(
-                json.encodeToString(Event(id = id, participateByMe = false)).toRequestBody(jsonType)
+                "".toRequestBody(jsonType)
             ).build()
         )
 
@@ -191,13 +191,14 @@ class NetworkEventsRepository() : EventRepository {
     }
 
     override fun save(id: Long, content: String, callback: Callback<Event>) {
-        val a = json.encodeToString(
-            Event(
-                id = id, content = content, datetime = "2024-12-18T16:07:31.146Z"
-            )
-        ).toRequestBody(jsonType)
         val call = client.newCall(
-            Request.Builder().url("https://eltex-android.ru/api/events").post(a).build()
+            Request.Builder().url("https://eltex-android.ru/api/events").post(
+                json.encodeToString(
+                    Event(
+                        id = id, content = content, datetime = "2024-12-18T16:07:31.146Z"
+                    )
+                ).toRequestBody(jsonType)
+            ).build()
         )
 
         call.enqueue(object : okhttp3.Callback {
@@ -226,7 +227,7 @@ class NetworkEventsRepository() : EventRepository {
     override fun deleteById(id: Long, callback: Callback<Unit>) {
         val call = client.newCall(
             Request.Builder().url("https://eltex-android.ru/api/events/$id")
-                .delete(json.encodeToString(Event(id = id)).toRequestBody(jsonType)).build()
+                .delete("".toRequestBody(jsonType)).build()
         )
 
         call.enqueue(object : okhttp3.Callback {
