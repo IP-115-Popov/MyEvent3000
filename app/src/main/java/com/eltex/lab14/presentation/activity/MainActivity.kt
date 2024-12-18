@@ -1,13 +1,9 @@
 package com.eltex.lab14.presentation.activity
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.fragment.findNavController
-import com.eltex.lab14.Constants
 import com.eltex.lab14.R
-import com.eltex.lab14.fragments.ToolbarFragment
 import com.eltex.lab14.presentation.ui.EdgeToEdgeHelper
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {

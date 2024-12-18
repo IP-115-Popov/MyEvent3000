@@ -10,16 +10,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.viewModelFactory
-import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.eltex.lab14.R
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.FragmentPostBinding
-import com.eltex.lab14.db.AppDb
 import com.eltex.lab14.presentation.adapters.EventAdapter
 import com.eltex.lab14.presentation.adapters.OffsetDecoration
 import com.eltex.lab14.presentation.viewmodel.EventViewModel
-import com.eltex.lab14.repository.SqliteEventsRepository
+import com.eltex.lab14.repository.NetworkEventsRepository
 import com.eltex.lab14.utils.share
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -38,9 +36,7 @@ class PostFragment : Fragment() {
             viewModelFactory {
                 addInitializer(EventViewModel::class) {
                     EventViewModel(
-                        SqliteEventsRepository(
-                            AppDb.getInstance(requireContext().applicationContext).eventDao
-                        )
+                        NetworkEventsRepository()
                     )
                 }
             }
@@ -80,9 +76,12 @@ class PostFragment : Fragment() {
         binding.recyclerView.addItemDecoration(OffsetDecoration(resources.getDimensionPixelOffset(R.dimen.list_offset)))
         binding.recyclerView.adapter = adapter
 
-        viewModel.uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach {
-            adapter.submitEventList(it.events)
-        }.launchIn(viewLifecycleOwner.lifecycleScope)
+        viewModel.uiState
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach {
+                adapter.submitEventList(it.events)
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
 
         return binding.root

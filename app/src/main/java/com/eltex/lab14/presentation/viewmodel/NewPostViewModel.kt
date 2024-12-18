@@ -9,7 +9,8 @@ class NewPostViewModel(
 ) : ViewModel() {
 
     fun save(content: String) {
-        repository.save(id, content)
+        TODO()
+        //repository.save(id, content)
     }
 
 }

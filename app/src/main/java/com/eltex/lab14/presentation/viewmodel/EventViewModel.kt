@@ -1,14 +1,12 @@
 package com.eltex.lab14.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.repository.EventRepository
+import com.eltex.lab14.util.Callback
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 
 class EventViewModel(private val repository: EventRepository) : ViewModel() {
@@ -17,31 +15,40 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
 
     init {
-        repository.getEvent().onEach { events: List<Event> ->
-            _uiState.update { it ->
-                it.copy(events = events)
+        repository.getEvent(
+            object : Callback<List<Event>> {
+                override fun onSuccess(data: List<Event>) {
+                    _uiState.update {
+                        it.copy(events = data)
+                    }
+                }
+
+                override fun onError(exception: java.lang.Exception) {
+                    //TODO State
+                    exception.printStackTrace()
+                }
             }
-        }.launchIn(viewModelScope)
+        )
     }
 
     fun likeById(id: Long) {
-        repository.likeById(id)
+        TODO()
     }
 
     fun participateById(id: Long) {
-        repository.participateById(id)
+        TODO()
     }
 
     fun addEvent(content: String) {
-        repository.save(0, content)
+        TODO()
     }
 
     fun updateEvent(id: Long, newContent: String) {
-        repository.save(id, newContent)
+        TODO()
     }
 
     fun deleteById(id: Long) {
-        repository.deleteById(id)
+        TODO()
     }
 
 }

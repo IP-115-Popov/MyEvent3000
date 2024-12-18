@@ -15,10 +15,9 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.FragmentNewPostBinding
-import com.eltex.lab14.db.AppDb
 import com.eltex.lab14.presentation.viewmodel.NewPostViewModel
 import com.eltex.lab14.presentation.viewmodel.ToolbarViewModel
-import com.eltex.lab14.repository.SqliteEventsRepository
+import com.eltex.lab14.repository.NetworkEventsRepository
 import com.eltex.lab14.utils.toast
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -52,9 +51,8 @@ class NewPostFragment : Fragment() {
                     NewPostViewModel::class
                 ) {
                     NewPostViewModel(
-                        SqliteEventsRepository(
-                            AppDb.getInstance(requireContext().applicationContext).eventDao
-                        ), postId
+                        NetworkEventsRepository(),
+                        postId
                     )
                 }
             }
