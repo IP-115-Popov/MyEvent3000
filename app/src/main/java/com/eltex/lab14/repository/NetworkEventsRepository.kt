@@ -149,11 +149,69 @@ class NetworkEventsRepository() : EventRepository {
     }
 
     override fun participateById(id: Long, callback: Callback<Event>) {
-        TODO("Not yet implemented")
+        val call = client.newCall(
+            Request.Builder()
+                .url("https://eltex-android.ru/api/events/$id/participants")
+                .post(json.encodeToString(Event(id=id, participateByMe = true)).toRequestBody(jsonType))
+                .build()
+        )
+
+        call.enqueue(
+            object : okhttp3.Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        try {
+                            callback.onSuccess(
+                                json.decodeFromString(requireNotNull(response.body).string())
+                            )
+                        } catch (e: Exception) {
+                            callback.onError(e)
+                        }
+
+                    } else {
+                        callback.onError(RuntimeException("Response code is ${response.code}"))
+
+                    }
+                }
+            }
+        )
     }
 
     override fun deleteParticipateById(id: Long, callback: Callback<Event>) {
-        TODO("Not yet implemented")
+        val call = client.newCall(
+            Request.Builder()
+                .url("https://eltex-android.ru/api/events/$id/participants")
+                .delete(json.encodeToString(Event(id=id, participateByMe = false)).toRequestBody(jsonType))
+                .build()
+        )
+
+        call.enqueue(
+            object : okhttp3.Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        try {
+                            callback.onSuccess(
+                                json.decodeFromString(requireNotNull(response.body).string())
+                            )
+                        } catch (e: Exception) {
+                            callback.onError(e)
+                        }
+
+                    } else {
+                        callback.onError(RuntimeException("Response code is ${response.code}"))
+
+                    }
+                }
+            }
+        )
     }
 
     override fun save(id: Long, content: String, callback: Callback<Event>) {
@@ -191,6 +249,33 @@ class NetworkEventsRepository() : EventRepository {
     }
 
     override fun deleteById(id: Long, callback: Callback<Unit>) {
-        TODO("Not yet implemented")
+        val call = client.newCall(
+            Request.Builder()
+                .url("https://eltex-android.ru/api/events/$id")
+                .delete(json.encodeToString(Event(id = id)).toRequestBody(jsonType))
+                .build()
+        )
+
+        call.enqueue(
+            object : okhttp3.Callback {
+                override fun onFailure(call: Call, e: IOException) {
+                    callback.onError(e)
+                }
+
+                override fun onResponse(call: Call, response: Response) {
+                    if (response.isSuccessful) {
+                        try {
+                            callback.onSuccess(Unit)
+                        } catch (e: Exception) {
+                            callback.onError(e)
+                        }
+
+                    } else {
+                        callback.onError(RuntimeException("Response code is ${response.code}"))
+
+                    }
+                }
+            }
+        )
     }
 }
