@@ -53,7 +53,7 @@ class NetworkEventsRepository() : EventRepository {
     override fun getEvent(callback: Callback<List<Event>>) {
         val call = client.newCall(
             Request.Builder()
-                .url("https://eltex-android.ru/api/posts")
+                .url("https://eltex-android.ru/api/events")
                 .build()
         )
 
@@ -85,7 +85,7 @@ class NetworkEventsRepository() : EventRepository {
     override fun likeById(id: Long, callback: Callback<Event>) {
         val call = client.newCall(
             Request.Builder()
-                .url("https://eltex-android.ru/api/posts/$id/likes")
+                .url("https://eltex-android.ru/api/events/$id/likes")
                 .post(json.encodeToString(Event(id=id, likedByMe = false)).toRequestBody(jsonType))
                 .build()
         )
@@ -118,7 +118,7 @@ class NetworkEventsRepository() : EventRepository {
     override fun deleteLikeById(id: Long, callback: Callback<Event>) {
         val call = client.newCall(
             Request.Builder()
-                .url("https://eltex-android.ru/api/posts/$id/likes")
+                .url("https://eltex-android.ru/api/events/$id/likes")
                 .delete(json.encodeToString(Event(id=id, likedByMe = false)).toRequestBody(jsonType))
                 .build()
         )
@@ -152,11 +152,16 @@ class NetworkEventsRepository() : EventRepository {
         TODO("Not yet implemented")
     }
 
+    override fun deleteParticipateById(id: Long, callback: Callback<Event>) {
+        TODO("Not yet implemented")
+    }
+
     override fun save(id: Long, content: String, callback: Callback<Event>) {
+        val a = json.encodeToString(Event(content = content, datetime = "2024-12-18T16:07:31.146Z")).toRequestBody(jsonType)
         val call = client.newCall(
             Request.Builder()
-                .url("https://eltex-android.ru/api/posts")
-                .post(json.encodeToString(Event(id = id, content = content)).toRequestBody(jsonType))
+                .url("https://eltex-android.ru/api/events")
+                .post(a)
                 .build()
         )
 

@@ -9,6 +9,7 @@ data class Event(
     @SerialName("author") val author: String = "",
     @SerialName("content") val content: String = "",
     @SerialName("published") val published: String = "",
+    @SerialName("datetime") val datetime: String = "",
     @SerialName("likedByMe") val likedByMe: Boolean = false,
     @SerialName("participateByMe") val participateByMe: Boolean = false,
 )

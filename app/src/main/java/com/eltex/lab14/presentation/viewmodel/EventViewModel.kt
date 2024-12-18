@@ -80,7 +80,6 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     fun participateById(id: Long) {
         TODO()
     }
-
     fun addEvent(content: String) {
         TODO()
     }
