@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
@@ -18,6 +20,7 @@ import com.eltex.lab14.databinding.FragmentNewPostBinding
 import com.eltex.lab14.presentation.viewmodel.NewPostViewModel
 import com.eltex.lab14.presentation.viewmodel.ToolbarViewModel
 import com.eltex.lab14.repository.NetworkEventsRepository
+import com.eltex.lab14.util.getErrorText
 import com.eltex.lab14.utils.toast
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
@@ -62,12 +65,25 @@ class NewPostFragment : Fragment() {
 
             if (content.isNotBlank()) {
                 newPostViewModel.save(content)
-                findNavController().navigateUp()
+               // findNavController().navigateUp()
             } else {
                 requireContext().toast(R.string.content_is_epmty, false)
             }
             toolbarViewModel.onSaveClicked(false)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
+
+        newPostViewModel.state
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
+            .onEach {
+                if (it.event != null) {
+                    findNavController().navigateUp()
+                }
+                it.status.throwableOrNull?.getErrorText((requireContext()))?.let { errorText ->
+                    Toast.makeText(requireContext(), errorText, Toast.LENGTH_SHORT).show()
+                    newPostViewModel.consumeError()
+                }
+            }
+            .launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewLifecycleOwner.lifecycle.addObserver(object : LifecycleEventObserver {
             override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
@@ -80,21 +96,8 @@ class NewPostFragment : Fragment() {
                 }
             }
         })
-//        val id = intent.getLongExtra(Intent.EXTRA_INDEX, -1)
-//        val oldContent: String = intent.getStringExtra(Intent.EXTRA_TEXT) ?: ""
-//
-//        binding.etvContent.setText(Editable.Factory.getInstance().newEditable(oldContent))
-//
-//        binding.toolbar.menu.findItem(R.id.save_post).setOnMenuItemClickListener {
-//            if (id == Constants.ID_NON_EXISTENT_EVENT) addEvent()
-//            else updatePost(id)
-//
-//            true
-//        }
-//
-//        binding.toolbar.setNavigationOnClickListener {
-//            onBackPressed()
-//        }
+
+
 
         return binding.root
     }

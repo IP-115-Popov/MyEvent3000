@@ -15,17 +15,24 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
 
     init {
+        load()
+    }
+
+    fun load() {
+        _uiState.update { it.copy(status = Status.Loading) }
         repository.getEvent(
             object : Callback<List<Event>> {
                 override fun onSuccess(data: List<Event>) {
                     _uiState.update {
-                        it.copy(events = data)
+                        it.copy(
+                            status = Status.Idle,
+                            events = data
+                        )
                     }
                 }
 
                 override fun onError(exception: java.lang.Exception) {
-                    //TODO State
-                    exception.printStackTrace()
+                    _uiState.update { it.copy(status = Status.Error(exception)) }
                 }
             }
         )
@@ -49,6 +56,10 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     fun deleteById(id: Long) {
         TODO()
+    }
+
+    fun consumeError() {
+        _uiState.update { it.copy(status = Status.Idle) }
     }
 
 }

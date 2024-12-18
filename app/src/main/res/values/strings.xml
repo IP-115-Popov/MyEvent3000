@@ -24,4 +24,7 @@
     <string name="bottom_menu_users">Users</string>
     <string name="created_post">Created Post</string>
     <string name="postfragment">PostFragment</string>
+    <string name="retry">Retry</string>
+    <string name="network_error">Network Error</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>

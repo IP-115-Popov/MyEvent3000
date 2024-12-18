@@ -32,6 +32,8 @@ android {
                 }
             }
         buildConfigField("String", "API_KEY", secretProps.getProperty("API_KEY"))
+        //TODO REGISTRATION
+        buildConfigField("String", "AUTHORIZATION", secretProps.getProperty("AUTHORIZATION"))
     }
 
     buildTypes {
@@ -64,6 +66,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.androidx.swiperefreshlayout)
 
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
