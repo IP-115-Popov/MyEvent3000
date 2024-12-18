@@ -20,22 +20,19 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     fun load() {
         _uiState.update { it.copy(status = Status.Loading) }
-        repository.getEvent(
-            object : Callback<List<Event>> {
-                override fun onSuccess(data: List<Event>) {
-                    _uiState.update {
-                        it.copy(
-                            status = Status.Idle,
-                            events = data
-                        )
-                    }
-                }
-
-                override fun onError(exception: java.lang.Exception) {
-                    _uiState.update { it.copy(status = Status.Error(exception)) }
+        repository.getEvent(object : Callback<List<Event>> {
+            override fun onSuccess(data: List<Event>) {
+                _uiState.update {
+                    it.copy(
+                        status = Status.Idle, events = data
+                    )
                 }
             }
-        )
+
+            override fun onError(exception: java.lang.Exception) {
+                _uiState.update { it.copy(status = Status.Error(exception)) }
+            }
+        })
     }
 
     fun likeById(id: Long) {
@@ -55,8 +52,9 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
                         override fun onError(exception: java.lang.Exception) {
                             _uiState.update { it.copy(status = Status.Error(exception)) }
                         }
-                    } )
+                    })
                 }
+
                 false -> {
                     repository.likeById(id, object : Callback<Event> {
                         override fun onSuccess(data: Event) {
@@ -71,7 +69,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
                         override fun onError(exception: java.lang.Exception) {
                             _uiState.update { it.copy(status = Status.Error(exception)) }
                         }
-                    } )
+                    })
                 }
             }
         }
@@ -94,9 +92,10 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
                         override fun onError(exception: java.lang.Exception) {
                             _uiState.update { it.copy(status = Status.Error(exception)) }
                         }
-                    } )
+                    })
 
                 }
+
                 false -> {
                     repository.participateById(id, object : Callback<Event> {
                         override fun onSuccess(data: Event) {
@@ -111,7 +110,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
                         override fun onError(exception: java.lang.Exception) {
                             _uiState.update { it.copy(status = Status.Error(exception)) }
                         }
-                    } )
+                    })
                 }
             }
         }
@@ -126,7 +125,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     }
 
     fun deleteById(id: Long) {
-        repository.deleteById(id, object: Callback<Unit>{
+        repository.deleteById(id, object : Callback<Unit> {
             override fun onSuccess(data: Unit) {
                 _uiState.update {
                     load()
@@ -135,6 +134,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
                     )
                 }
             }
+
             override fun onError(exception: java.lang.Exception) {
                 _uiState.update { it.copy(status = Status.Error(exception)) }
             }

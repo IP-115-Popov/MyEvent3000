@@ -22,7 +22,6 @@ import com.eltex.lab14.presentation.viewmodel.EventViewModel
 import com.eltex.lab14.repository.NetworkEventsRepository
 import com.eltex.lab14.util.getErrorText
 import com.eltex.lab14.utils.share
-import com.eltex.lab14.utils.toast
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -87,25 +86,23 @@ class PostFragment : Fragment() {
             viewModel.load()
         }
 
-        viewModel.uiState
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { state ->
-                binding.errorGroup.isVisible = state.isEmptyError
-                val errorText = state.status.throwableOrNull?.getErrorText(requireContext())
-                binding.tvError.text = errorText
+        viewModel.uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach { state ->
+            binding.errorGroup.isVisible = state.isEmptyError
+            val errorText = state.status.throwableOrNull?.getErrorText(requireContext())
+            binding.tvError.text = errorText
 
-                binding.progress.isVisible = state.isEmptyLoading
+            binding.progress.isVisible = state.isEmptyLoading
 
-                binding.swipeRefresh.isRefreshing = state.isRefreshing
+            binding.swipeRefresh.isRefreshing = state.isRefreshing
 
-                if (state.isRefreshError) {
-                    Toast.makeText(requireContext(), errorText, Toast.LENGTH_SHORT).show()
+            if (state.isRefreshError) {
+                Toast.makeText(requireContext(), errorText, Toast.LENGTH_SHORT).show()
 
-                    viewModel.consumeError()
-                }
+                viewModel.consumeError()
+            }
 
-                state.events?.let { adapter.submitEventList(it) }
-            }.launchIn(viewLifecycleOwner.lifecycleScope)
+            state.events?.let { adapter.submitEventList(it) }
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 
         return binding.root

@@ -54,8 +54,7 @@ class NewPostFragment : Fragment() {
                     NewPostViewModel::class
                 ) {
                     NewPostViewModel(
-                        NetworkEventsRepository(),
-                        postId
+                        NetworkEventsRepository(), postId
                     )
                 }
             }
@@ -65,25 +64,22 @@ class NewPostFragment : Fragment() {
 
             if (content.isNotBlank()) {
                 newPostViewModel.save(content)
-               // findNavController().navigateUp()
+                // findNavController().navigateUp()
             } else {
                 requireContext().toast(R.string.content_is_epmty, false)
             }
             toolbarViewModel.onSaveClicked(false)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        newPostViewModel.state
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach {
-                if (it.event != null) {
-                    findNavController().navigateUp()
-                }
-                it.status.throwableOrNull?.getErrorText((requireContext()))?.let { errorText ->
-                    Toast.makeText(requireContext(), errorText, Toast.LENGTH_SHORT).show()
-                    newPostViewModel.consumeError()
-                }
+        newPostViewModel.state.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach {
+            if (it.event != null) {
+                findNavController().navigateUp()
             }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+            it.status.throwableOrNull?.getErrorText((requireContext()))?.let { errorText ->
+                Toast.makeText(requireContext(), errorText, Toast.LENGTH_SHORT).show()
+                newPostViewModel.consumeError()
+            }
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
         viewLifecycleOwner.lifecycle.addObserver(object : LifecycleEventObserver {
             override fun onStateChanged(source: LifecycleOwner, event: Lifecycle.Event) {
