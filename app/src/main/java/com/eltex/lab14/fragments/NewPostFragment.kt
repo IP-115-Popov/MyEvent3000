@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
@@ -33,6 +34,7 @@ class NewPostFragment : Fragment() {
     companion object {
         const val POST_ID = "POST_ID"
         const val CONTENT = "CONTENT"
+        const val POST_CREATED_KEY = "POST_CREATED_KEY"
     }
 
     override fun onCreateView(
@@ -73,6 +75,9 @@ class NewPostFragment : Fragment() {
 
         newPostViewModel.state.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach {
             if (it.event != null) {
+                requireActivity().supportFragmentManager.setFragmentResult(
+                    POST_CREATED_KEY, bundleOf()
+                )
                 findNavController().navigateUp()
             }
             it.status.throwableOrNull?.getErrorText((requireContext()))?.let { errorText ->

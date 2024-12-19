@@ -45,6 +45,11 @@ class PostFragment : Fragment() {
             }
         }
 
+        requireActivity().supportFragmentManager.setFragmentResultListener(
+            NewPostFragment.POST_CREATED_KEY, viewLifecycleOwner
+        ) { _, _ ->
+            viewModel.load()
+        }
 
         val adapter = EventAdapter(object : EventAdapter.EventListener {
             override fun likeClickListener(event: Event) {

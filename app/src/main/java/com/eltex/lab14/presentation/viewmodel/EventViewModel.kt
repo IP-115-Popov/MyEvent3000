@@ -29,91 +29,93 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
                 }
             }
 
-            override fun onError(exception: java.lang.Exception) {
+            override fun onError(exception: Throwable) {
                 _uiState.update { it.copy(status = Status.Error(exception)) }
             }
         })
     }
 
     fun likeById(id: Long) {
-        uiState.value.events?.find { it.id == id }?.let {
-            when (it.likedByMe) {
-                true -> {
-                    repository.deleteLikeById(id, object : Callback<Event> {
-                        override fun onSuccess(data: Event) {
-                            _uiState.update {
-                                load()
-                                it.copy(
-                                    status = Status.Idle,
-                                )
-                            }
-                        }
-
-                        override fun onError(exception: java.lang.Exception) {
-                            _uiState.update { it.copy(status = Status.Error(exception)) }
-                        }
-                    })
-                }
-
-                false -> {
-                    repository.likeById(id, object : Callback<Event> {
-                        override fun onSuccess(data: Event) {
-                            _uiState.update {
-                                load()
-                                it.copy(
-                                    status = Status.Idle,
-                                )
-                            }
-                        }
-
-                        override fun onError(exception: java.lang.Exception) {
-                            _uiState.update { it.copy(status = Status.Error(exception)) }
-                        }
-                    })
-                }
-            }
-        }
+        //TODO
+//        uiState.value.events?.find { it.id == id }?.let {
+//            when (it.likedByMe) {
+//                true -> {
+//                    repository.deleteLikeById(id, object : Callback<Event> {
+//                        override fun onSuccess(data: Event) {
+//                            _uiState.update {
+//                                load()
+//                                it.copy(
+//                                    status = Status.Idle,
+//                                )
+//                            }
+//                        }
+//
+//                        override fun onError(exception: java.lang.Exception) {
+//                            _uiState.update { it.copy(status = Status.Error(exception)) }
+//                        }
+//                    })
+//                }
+//
+//                false -> {
+//                    repository.likeById(id, object : Callback<Event> {
+//                        override fun onSuccess(data: Event) {
+//                            _uiState.update {
+//                                load()
+//                                it.copy(
+//                                    status = Status.Idle,
+//                                )
+//                            }
+//                        }
+//
+//                        override fun onError(exception: java.lang.Exception) {
+//                            _uiState.update { it.copy(status = Status.Error(exception)) }
+//                        }
+//                    })
+//                }
+//            }
+//        }
     }
 
     fun participateById(id: Long) {
-        uiState.value.events?.find { it.id == id }?.let {
-            when (it.participateByMe) {
-                true -> {
-                    repository.deleteParticipateById(id, object : Callback<Event> {
-                        override fun onSuccess(data: Event) {
-                            _uiState.update {
-                                load()
-                                it.copy(
-                                    status = Status.Idle,
-                                )
-                            }
-                        }
-
-                        override fun onError(exception: java.lang.Exception) {
-                            _uiState.update { it.copy(status = Status.Error(exception)) }
-                        }
-                    })
-
-                }
-
-                false -> {
-                    repository.participateById(id, object : Callback<Event> {
-                        override fun onSuccess(data: Event) {
-                            _uiState.update {
-                                load()
-                                it.copy(
-                                    status = Status.Idle,
-                                )
-                            }
-                        }
-
-                        override fun onError(exception: java.lang.Exception) {
-                            _uiState.update { it.copy(status = Status.Error(exception)) }
-                        }
-                    })
-                }
-            }
-        }
+        //TODO
+//        uiState.value.events?.find { it.id == id }?.let {
+//            when (it.participateByMe) {
+//                true -> {
+//                    repository.deleteParticipateById(id, object : Callback<Event> {
+//                        override fun onSuccess(data: Event) {
+//                            _uiState.update {
+//                                load()
+//                                it.copy(
+//                                    status = Status.Idle,
+//                                )
+//                            }
+//                        }
+//
+//                        override fun onError(exception: java.lang.Exception) {
+//                            _uiState.update { it.copy(status = Status.Error(exception)) }
+//                        }
+//                    })
+//
+//                }
+//
+//                false -> {
+//                    repository.participateById(id, object : Callback<Event> {
+//                        override fun onSuccess(data: Event) {
+//                            _uiState.update {
+//                                load()
+//                                it.copy(
+//                                    status = Status.Idle,
+//                                )
+//                            }
+//                        }
+//
+//                        override fun onError(exception: java.lang.Exception) {
+//                            _uiState.update { it.copy(status = Status.Error(exception)) }
+//                        }
+//                    })
+//                }
+//            }
+//        }
     }
 
     fun addEvent(content: String) {
@@ -125,20 +127,21 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
     }
 
     fun deleteById(id: Long) {
-        repository.deleteById(id, object : Callback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _uiState.update {
-                    load()
-                    it.copy(
-                        status = Status.Idle,
-                    )
-                }
-            }
-
-            override fun onError(exception: java.lang.Exception) {
-                _uiState.update { it.copy(status = Status.Error(exception)) }
-            }
-        })
+        //TODO
+//        repository.deleteById(id, object : Callback<Unit> {
+//            override fun onSuccess(data: Unit) {
+//                _uiState.update {
+//                    load()
+//                    it.copy(
+//                        status = Status.Idle,
+//                    )
+//                }
+//            }
+//
+//            override fun onError(exception: java.lang.Exception) {
+//                _uiState.update { it.copy(status = Status.Error(exception)) }
+//            }
+//        })
     }
 
     fun consumeError() {

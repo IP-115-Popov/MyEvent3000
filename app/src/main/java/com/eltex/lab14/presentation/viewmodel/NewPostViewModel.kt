@@ -23,7 +23,7 @@ class NewPostViewModel(
                 _state.update { it.copy(status = Status.Idle, event = data) }
             }
 
-            override fun onError(exception: Exception) {
+            override fun onError(exception: Throwable) {
                 _state.update { it.copy(status = Status.Error(exception)) }
             }
 

@@ -66,6 +66,10 @@ android {
 }
 
 dependencies {
+    implementation(libs.converter.kotlinx.serialization)
+
+    implementation(libs.retrofit)
+
     implementation(libs.androidx.swiperefreshlayout)
 
     implementation(platform(libs.okhttp.bom))
