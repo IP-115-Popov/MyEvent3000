@@ -17,10 +17,19 @@ interface EventApi {
     fun savEvent(@Body event: Event): Call<Event>
 
     @POST("api/events/{id}/likes")
-    fun likeById(@Path("id") id: Long) : Call<Event>
+    fun likeById(@Path("id") id: Long): Call<Event>
 
     @DELETE("api/events/{id}/likes")
-    fun deleteLikeById(@Path("id") id: Long) : Call<Event>
+    fun deleteLikeById(@Path("id") id: Long): Call<Event>
+
+    @POST("api/events/{id}/participants")
+    fun participateById(@Path("id") id: Long): Call<Event>
+
+    @DELETE("api/events/{id}/participants")
+    fun deleteParticipateById(@Path("id") id: Long): Call<Event>
+
+    @DELETE("api/events/{id}")
+    fun deleteById(@Path("id") id: Long): Call<Unit>
 
 
     companion object {

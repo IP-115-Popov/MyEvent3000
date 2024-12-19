@@ -74,65 +74,45 @@ class NetworkEventsRepository() : EventRepository {
     }
 
     override fun participateById(id: Long, callback: DomainCallback<Event>) {
-        //TODO
-//        val call = client.newCall(
-//            Request.Builder().url("https://eltex-android.ru/api/events/$id/participants").post(
-//                "".toRequestBody(jsonType)
-//            ).build()
-//        )
-//
-//        call.enqueue(object : okhttp3.Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                callback.onError(e)
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                if (response.isSuccessful) {
-//                    try {
-//                        callback.onSuccess(
-//                            json.decodeFromString(requireNotNull(response.body).string())
-//                        )
-//                    } catch (e: Exception) {
-//                        callback.onError(e)
-//                    }
-//
-//                } else {
-//                    callback.onError(RuntimeException("Response code is ${response.code}"))
-//
-//                }
-//            }
-//        })
+        val call = EventApi.INSTANCE.participateById(id)
+
+        call.enqueue(object : RetrofitCallback<Event> {
+            override fun onResponse(call: Call<Event>, response: Response<Event>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(
+                        requireNotNull(response.body())
+                    )
+                } else {
+                    callback.onError(RuntimeException("Response code is ${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<Event>, throwable: Throwable) {
+                callback.onError(throwable)
+            }
+
+        })
     }
 
     override fun deleteParticipateById(id: Long, callback: DomainCallback<Event>) {
-        //TODO
-//        val call = client.newCall(
-//            Request.Builder().url("https://eltex-android.ru/api/events/$id/participants").delete(
-//                "".toRequestBody(jsonType)
-//            ).build()
-//        )
-//
-//        call.enqueue(object : okhttp3.Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                callback.onError(e)
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                if (response.isSuccessful) {
-//                    try {
-//                        callback.onSuccess(
-//                            json.decodeFromString(requireNotNull(response.body).string())
-//                        )
-//                    } catch (e: Exception) {
-//                        callback.onError(e)
-//                    }
-//
-//                } else {
-//                    callback.onError(RuntimeException("Response code is ${response.code}"))
-//
-//                }
-//            }
-//        })
+        val call = EventApi.INSTANCE.deleteParticipateById(id)
+
+        call.enqueue(object : RetrofitCallback<Event> {
+            override fun onResponse(call: Call<Event>, response: Response<Event>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(
+                        requireNotNull(response.body())
+                    )
+                } else {
+                    callback.onError(RuntimeException("Response code is ${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<Event>, throwable: Throwable) {
+                callback.onError(throwable)
+            }
+
+        })
     }
 
     override fun save(id: Long, content: String, callback: DomainCallback<Event>) {
@@ -161,30 +141,21 @@ class NetworkEventsRepository() : EventRepository {
     }
 
     override fun deleteById(id: Long, callback: DomainCallback<Unit>) {
-        //TODO
-//        val call = client.newCall(
-//            Request.Builder().url("https://eltex-android.ru/api/events/$id")
-//                .delete("".toRequestBody(jsonType)).build()
-//        )
-//
-//        call.enqueue(object : okhttp3.Callback {
-//            override fun onFailure(call: Call, e: IOException) {
-//                callback.onError(e)
-//            }
-//
-//            override fun onResponse(call: Call, response: Response) {
-//                if (response.isSuccessful) {
-//                    try {
-//                        callback.onSuccess(Unit)
-//                    } catch (e: Exception) {
-//                        callback.onError(e)
-//                    }
-//
-//                } else {
-//                    callback.onError(RuntimeException("Response code is ${response.code}"))
-//
-//                }
-//            }
-//        })
+        val call = EventApi.INSTANCE.deleteById(id)
+
+        call.enqueue(object : RetrofitCallback<Unit> {
+
+            override fun onResponse(call: Call<Unit>, response: Response<Unit>) {
+                if (response.isSuccessful) {
+                    callback.onSuccess(Unit)
+                } else {
+                    callback.onError(RuntimeException("Response code is ${response.code()}"))
+                }
+            }
+
+            override fun onFailure(call: Call<Unit>, throwable: Throwable) {
+                callback.onError(throwable)
+            }
+        })
     }
 }
