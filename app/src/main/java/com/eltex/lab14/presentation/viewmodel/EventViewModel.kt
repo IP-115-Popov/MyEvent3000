@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.presentation.ui.EventUiModelMapper
 import com.eltex.lab14.repository.EventRepository
+import com.eltex.lab14.rx.SchedulersProvider
 import com.eltex.lab14.util.Callback
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -15,7 +16,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
-class EventViewModel(private val repository: EventRepository) : ViewModel() {
+class EventViewModel(
+    private val repository: EventRepository,
+    private val schedulersProvider: SchedulersProvider = SchedulersProvider.DEFAULT
+) : ViewModel() {
 
     private val mapper = EventUiModelMapper()
 
@@ -32,12 +36,12 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
         _uiState.update { it.copy(status = Status.Loading) }
 
         repository.getEvent()
-            .observeOn(Schedulers.computation())
+            .observeOn(schedulersProvider.computation)
             .map {
                 it.map { event -> mapper.map(event) }
 
             }
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(schedulersProvider.mainThread)
             .subscribeBy(
                 onSuccess = { events ->
                     _uiState.update {
@@ -58,7 +62,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
             when (it.likedByMe) {
                 true -> {
                     repository.deleteLikeById(id)
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .observeOn(schedulersProvider.mainThread)
                         .subscribeBy(
                             onSuccess = { events ->
                                 _uiState.update {
@@ -77,7 +81,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
                 false -> {
                     repository.likeById(id)
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .observeOn(schedulersProvider.mainThread)
                         .subscribeBy(
                             onSuccess = { events ->
                                 _uiState.update {
@@ -102,7 +106,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
             when (it.participateByMe) {
                 true -> {
                     repository.participateById(id)
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .observeOn(schedulersProvider.mainThread)
                         .subscribeBy(
                             onSuccess = { events ->
                                 _uiState.update {
@@ -121,7 +125,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
                 false -> {
                     repository.deleteParticipateById(id)
-                        .observeOn(AndroidSchedulers.mainThread())
+                        .observeOn(schedulersProvider.mainThread)
                         .subscribeBy(
                             onSuccess = { events ->
                                 _uiState.update {
@@ -143,7 +147,7 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     fun deleteById(id: Long) {
         repository.deleteById(id)
-            .observeOn(AndroidSchedulers.mainThread())
+            .observeOn(schedulersProvider.mainThread)
             .subscribeBy(
                 onComplete = {
                     _uiState.update {
