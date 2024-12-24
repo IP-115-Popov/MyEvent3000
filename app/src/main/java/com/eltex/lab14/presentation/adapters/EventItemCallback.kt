@@ -19,7 +19,9 @@ class EventItemCallback : DiffUtil.ItemCallback<EventItem>() {
         return when {
             oldItem is EventItem.Event && newItem is EventItem.Event -> {
                 EventPayload(likedByMe = newItem.event.likedByMe.takeIf { it != oldItem.event.likedByMe },
-                    participateByMe = newItem.event.participateByMe.takeIf { it != oldItem.event.participateByMe }).takeIf { it.isNotEmpty() }
+                    participateByMe = newItem.event.participateByMe.takeIf { it != oldItem.event.participateByMe },
+                    likes = newItem.event.likes.takeIf { it != oldItem.event.likes }
+                ).takeIf { it.isNotEmpty() }
             }
 
             else -> null

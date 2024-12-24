@@ -46,6 +46,7 @@ android {
         }
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_18
         targetCompatibility = JavaVersion.VERSION_18
     }
@@ -66,6 +67,10 @@ android {
 }
 
 dependencies {
+
+// В dependencies
+    coreLibraryDesugaring(libs.desugar.jdk.libs)
+
     // RxJava
     implementation(libs.rxjava)
 // Функции для работы с MainThread

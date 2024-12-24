@@ -6,28 +6,28 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.eltex.lab14.R
-import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.CardEventBinding
 import com.eltex.lab14.databinding.DataHederBinding
 import com.eltex.lab14.presentation.animator.ButtonAnimator
+import com.eltex.lab14.presentation.ui.EventUiModel
 
 class EventAdapter(
     private val listener: EventListener
 ) : ListAdapter<EventItem, RecyclerView.ViewHolder>(EventItemCallback()) {
 
     interface EventListener {
-        fun likeClickListener(event: Event)
-        fun participateClickListener(event: Event)
-        fun shareClickListener(event: Event)
+        fun likeClickListener(event: EventUiModel)
+        fun participateClickListener(event: EventUiModel)
+        fun shareClickListener(event: EventUiModel)
         fun menuClickListener()
-        fun onDeleteClickListener(event: Event)
-        fun onUpdateClickListener(event: Event)
+        fun onDeleteClickListener(event: EventUiModel)
+        fun onUpdateClickListener(event: EventUiModel)
     }
 
     private val HEADER_VIEW_TYPE = 0
     private val ITEM_VIEW_TYPE = 1
 
-    fun submitEventList(events: List<Event>) {
+    fun submitEventList(events: List<EventUiModel>) {
         val items = events.groupBy { it.published } // Группируем по дате публикации (или любому другому признаку)
         super.submitList(
             items.flatMap { (publishedDate, eventList) ->
@@ -136,5 +136,5 @@ class EventAdapter(
 
 sealed class EventItem {
     data class Header(val title: String) : EventItem()
-    data class Event(val event: com.eltex.lab14.data.Event) : EventItem()
+    data class Event(val event: EventUiModel) : EventItem()
 }

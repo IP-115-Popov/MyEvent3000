@@ -1,9 +1,10 @@
 package com.eltex.lab14.presentation.viewmodel
 
 import com.eltex.lab14.data.Event
+import com.eltex.lab14.presentation.ui.EventUiModel
 
 data class EventUiState(
-    val events: List<Event>? = null, val status: Status = Status.Idle
+    val events: List<EventUiModel>? = null, val status: Status = Status.Idle
 ) {
     val isRefreshing: Boolean
         get() = status == Status.Loading && events?.isNotEmpty() == true

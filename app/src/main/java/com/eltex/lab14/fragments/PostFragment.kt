@@ -18,6 +18,7 @@ import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.FragmentPostBinding
 import com.eltex.lab14.presentation.adapters.EventAdapter
 import com.eltex.lab14.presentation.adapters.OffsetDecoration
+import com.eltex.lab14.presentation.ui.EventUiModel
 import com.eltex.lab14.presentation.viewmodel.EventViewModel
 import com.eltex.lab14.repository.NetworkEventsRepository
 import com.eltex.lab14.util.getErrorText
@@ -52,25 +53,25 @@ class PostFragment : Fragment() {
         }
 
         val adapter = EventAdapter(object : EventAdapter.EventListener {
-            override fun likeClickListener(event: Event) {
+            override fun likeClickListener(event: EventUiModel) {
                 viewModel.likeById(event.id)
             }
 
-            override fun participateClickListener(event: Event) {
+            override fun participateClickListener(event: EventUiModel) {
                 viewModel.participateById(event.id)
             }
 
-            override fun shareClickListener(event: Event) {
+            override fun shareClickListener(event: EventUiModel) {
                 requireContext().share(event.content)
             }
 
             override fun menuClickListener() {}
 
-            override fun onDeleteClickListener(event: Event) {
+            override fun onDeleteClickListener(event: EventUiModel) {
                 viewModel.deleteById(event.id)
             }
 
-            override fun onUpdateClickListener(event: Event) {
+            override fun onUpdateClickListener(event: EventUiModel) {
                 requireParentFragment().requireParentFragment().findNavController().navigate(
                     R.id.action_bottomNavigationFragment_to_newPostFragment, bundleOf(
                         NewPostFragment.POST_ID to event.id,

@@ -2,18 +2,22 @@ package com.eltex.lab14.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.eltex.lab14.data.Event
+import com.eltex.lab14.presentation.ui.EventUiModelMapper
 import com.eltex.lab14.repository.EventRepository
 import com.eltex.lab14.util.Callback
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.addTo
 import io.reactivex.rxjava3.kotlin.subscribeBy
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class EventViewModel(private val repository: EventRepository) : ViewModel() {
+
+    private val mapper = EventUiModelMapper()
 
     private val disposable = CompositeDisposable()
 
@@ -28,6 +32,11 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
         _uiState.update { it.copy(status = Status.Loading) }
 
         repository.getEvent()
+            .observeOn(Schedulers.computation())
+            .map {
+                it.map { event -> mapper.map(event) }
+
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(
                 onSuccess = { events ->
