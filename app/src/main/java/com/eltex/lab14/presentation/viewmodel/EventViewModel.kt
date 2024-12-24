@@ -58,90 +58,56 @@ class EventViewModel(
     }
 
     fun likeById(id: Long) {
-        uiState.value.events?.find { it.id == id }?.let {
-            when (it.likedByMe) {
-                true -> {
-                    repository.deleteLikeById(id)
-                        .observeOn(schedulersProvider.mainThread)
-                        .subscribeBy(
-                            onSuccess = { events ->
-                                _uiState.update {
-                                    load()
-                                    it.copy(
-                                        status = Status.Idle,
-                                    )
-                                }
-                            },
-                            onError = { throwable->
-                                _uiState.update { it.copy(status = Status.Error(throwable)) }
-                            }
-                        )
-                        .addTo(disposable)
-                }
-
-                false -> {
-                    repository.likeById(id)
-                        .observeOn(schedulersProvider.mainThread)
-                        .subscribeBy(
-                            onSuccess = { events ->
-                                _uiState.update {
-                                    load()
-                                    it.copy(
-                                        status = Status.Idle,
-                                    )
-                                }
-                            },
-                            onError = { throwable->
-                                _uiState.update { it.copy(status = Status.Error(throwable)) }
-                            }
-                        )
-                        .addTo(disposable)
-                }
+        uiState.value.events?.find { it.id == id }?.let { event ->
+            val action = if (event.likedByMe) {
+                repository.deleteLikeById(id)
+            } else {
+                repository.likeById(id)
             }
+
+            action
+                .observeOn(schedulersProvider.mainThread)
+                .subscribeBy(
+                    onSuccess = { events ->
+                        _uiState.update {
+                            load()
+                            it.copy(
+                                status = Status.Idle,
+                            )
+                        }
+                    },
+                    onError = { throwable->
+                        _uiState.update { it.copy(status = Status.Error(throwable)) }
+                    }
+                )
+                .addTo(disposable)
         }
     }
 
     fun participateById(id: Long) {
-        uiState.value.events?.find { it.id == id }?.let {
-            when (it.participateByMe) {
-                true -> {
-                    repository.participateById(id)
-                        .observeOn(schedulersProvider.mainThread)
-                        .subscribeBy(
-                            onSuccess = { events ->
-                                _uiState.update {
-                                    load()
-                                    it.copy(
-                                        status = Status.Idle,
-                                    )
-                                }
-                            },
-                            onError = { throwable->
-                                _uiState.update { it.copy(status = Status.Error(throwable)) }
-                            }
-                        )
-                        .addTo(disposable)
-                }
-
-                false -> {
-                    repository.deleteParticipateById(id)
-                        .observeOn(schedulersProvider.mainThread)
-                        .subscribeBy(
-                            onSuccess = { events ->
-                                _uiState.update {
-                                    load()
-                                    it.copy(
-                                        status = Status.Idle,
-                                    )
-                                }
-                            },
-                            onError = { throwable->
-                                _uiState.update { it.copy(status = Status.Error(throwable)) }
-                            }
-                        )
-                        .addTo(disposable)
-                }
+        uiState.value.events?.find { it.id == id }?.let {event ->
+            val action = if (event.likedByMe) {
+                repository.deleteParticipateById(id)
+            } else {
+                repository.participateById(id)
             }
+
+            action
+                .observeOn(schedulersProvider.mainThread)
+                .subscribeBy(
+                    onSuccess = { events ->
+                        _uiState.update {
+                            load()
+                            it.copy(
+                                status = Status.Idle,
+                            )
+                        }
+                    },
+                    onError = { throwable->
+                        _uiState.update { it.copy(status = Status.Error(throwable)) }
+                    }
+                )
+                .addTo(disposable)
         }
     }
 

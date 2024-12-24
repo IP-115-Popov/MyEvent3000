@@ -105,7 +105,7 @@ class EventViewModelTest {
         val error = RuntimeException("test")
         val viewModel = EventViewModel(
             object : EventRepository {
-                override fun deleteParticipateById(id: Long): Single<Event> =
+                override fun participateById(id: Long): Single<Event> =
                     Single.error(error)
                 override fun getEvent(): Single<List<Event>> =
                     Single.just(listOf(Event(id = 1)))
