@@ -66,6 +66,15 @@ android {
 }
 
 dependencies {
+    // RxJava
+    implementation(libs.rxjava)
+// Функции для работы с MainThread
+    implementation(libs.rxandroid)
+// Adapter для retrofit
+    implementation(libs.adapter.rxjava3)
+// Полезные экстеншены для Kotlin
+    implementation(libs.rxkotlin)
+
     implementation(libs.converter.kotlinx.serialization)
 
     implementation(libs.retrofit)

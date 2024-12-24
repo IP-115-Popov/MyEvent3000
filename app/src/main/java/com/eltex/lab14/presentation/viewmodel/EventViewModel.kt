@@ -4,12 +4,18 @@ import androidx.lifecycle.ViewModel
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.repository.EventRepository
 import com.eltex.lab14.util.Callback
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.kotlin.subscribeBy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 
 class EventViewModel(private val repository: EventRepository) : ViewModel() {
+
+    private val disposable = CompositeDisposable()
 
     private val _uiState = MutableStateFlow(EventUiState())
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
@@ -20,56 +26,63 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
 
     fun load() {
         _uiState.update { it.copy(status = Status.Loading) }
-        repository.getEvent(object : Callback<List<Event>> {
-            override fun onSuccess(data: List<Event>) {
-                _uiState.update {
-                    it.copy(
-                        status = Status.Idle, events = data
-                    )
-                }
-            }
 
-            override fun onError(exception: Throwable) {
-                _uiState.update { it.copy(status = Status.Error(exception)) }
-            }
-        })
+        repository.getEvent()
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onSuccess = { events ->
+                    _uiState.update {
+                        it.copy(
+                            status = Status.Idle, events = events
+                        )
+                    }
+                },
+                onError = { throwable->
+                    _uiState.update { it.copy(status = Status.Error(throwable)) }
+                }
+            )
+            .addTo(disposable)
     }
 
     fun likeById(id: Long) {
         uiState.value.events?.find { it.id == id }?.let {
             when (it.likedByMe) {
                 true -> {
-                    repository.deleteLikeById(id, object : Callback<Event> {
-                        override fun onSuccess(data: Event) {
-                            _uiState.update {
-                                load()
-                                it.copy(
-                                    status = Status.Idle,
-                                )
+                    repository.deleteLikeById(id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeBy(
+                            onSuccess = { events ->
+                                _uiState.update {
+                                    load()
+                                    it.copy(
+                                        status = Status.Idle,
+                                    )
+                                }
+                            },
+                            onError = { throwable->
+                                _uiState.update { it.copy(status = Status.Error(throwable)) }
                             }
-                        }
-
-                        override fun onError(exception: Throwable) {
-                            _uiState.update { it.copy(status = Status.Error(exception)) }
-                        }
-                    })
+                        )
+                        .addTo(disposable)
                 }
 
                 false -> {
-                    repository.likeById(id, object : Callback<Event> {
-                        override fun onSuccess(data: Event) {
-                            _uiState.update {
-                                load()
-                                it.copy(
-                                    status = Status.Idle,
-                                )
+                    repository.likeById(id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeBy(
+                            onSuccess = { events ->
+                                _uiState.update {
+                                    load()
+                                    it.copy(
+                                        status = Status.Idle,
+                                    )
+                                }
+                            },
+                            onError = { throwable->
+                                _uiState.update { it.copy(status = Status.Error(throwable)) }
                             }
-                        }
-
-                        override fun onError(exception: Throwable) {
-                            _uiState.update { it.copy(status = Status.Error(exception)) }
-                        }
-                    })
+                        )
+                        .addTo(disposable)
                 }
             }
         }
@@ -79,62 +92,70 @@ class EventViewModel(private val repository: EventRepository) : ViewModel() {
         uiState.value.events?.find { it.id == id }?.let {
             when (it.participateByMe) {
                 true -> {
-                    repository.deleteParticipateById(id, object : Callback<Event> {
-                        override fun onSuccess(data: Event) {
-                            _uiState.update {
-                                load()
-                                it.copy(
-                                    status = Status.Idle,
-                                )
+                    repository.participateById(id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeBy(
+                            onSuccess = { events ->
+                                _uiState.update {
+                                    load()
+                                    it.copy(
+                                        status = Status.Idle,
+                                    )
+                                }
+                            },
+                            onError = { throwable->
+                                _uiState.update { it.copy(status = Status.Error(throwable)) }
                             }
-                        }
-
-                        override fun onError(exception: Throwable) {
-                            _uiState.update { it.copy(status = Status.Error(exception)) }
-                        }
-                    })
-
+                        )
+                        .addTo(disposable)
                 }
 
                 false -> {
-                    repository.participateById(id, object : Callback<Event> {
-                        override fun onSuccess(data: Event) {
-                            _uiState.update {
-                                load()
-                                it.copy(
-                                    status = Status.Idle,
-                                )
+                    repository.deleteParticipateById(id)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeBy(
+                            onSuccess = { events ->
+                                _uiState.update {
+                                    load()
+                                    it.copy(
+                                        status = Status.Idle,
+                                    )
+                                }
+                            },
+                            onError = { throwable->
+                                _uiState.update { it.copy(status = Status.Error(throwable)) }
                             }
-                        }
-
-                        override fun onError(exception: Throwable) {
-                            _uiState.update { it.copy(status = Status.Error(exception)) }
-                        }
-                    })
+                        )
+                        .addTo(disposable)
                 }
             }
         }
     }
 
     fun deleteById(id: Long) {
-        repository.deleteById(id, object : Callback<Unit> {
-            override fun onSuccess(data: Unit) {
-                _uiState.update {
-                    load()
-                    it.copy(
-                        status = Status.Idle,
-                    )
+        repository.deleteById(id)
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribeBy(
+                onComplete = {
+                    _uiState.update {
+                        load()
+                        it.copy(
+                            status = Status.Idle,
+                        )
+                    }
+                },
+                onError = { throwable->
+                    _uiState.update { it.copy(status = Status.Error(throwable)) }
                 }
-            }
-
-            override fun onError(exception: Throwable) {
-                _uiState.update { it.copy(status = Status.Error(exception)) }
-            }
-        })
+            )
+            .addTo(disposable)
     }
 
     fun consumeError() {
         _uiState.update { it.copy(status = Status.Idle) }
     }
 
+    override fun onCleared() {
+        disposable.dispose()
+    }
 }
