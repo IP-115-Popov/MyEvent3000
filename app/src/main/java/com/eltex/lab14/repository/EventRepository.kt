@@ -1,21 +1,19 @@
 package com.eltex.lab14.repository
 
 import com.eltex.lab14.data.Event
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
 
 interface EventRepository {
-    fun getEvent() : Single<List<Event>> = Single.never()
+    suspend fun getEvent(): List<Event>?
 
-    fun likeById(id: Long): Single<Event> = Single.never()
+    suspend fun likeById(id: Long): Event
 
-    fun deleteLikeById(id: Long): Single<Event> = Single.never()
+    suspend fun deleteLikeById(id: Long): Event
 
-    fun participateById(id: Long): Single<Event> = Single.never()
+    suspend fun participateById(id: Long): Event
 
-    fun deleteParticipateById(id: Long): Single<Event> = Single.never()
+    suspend fun deleteParticipateById(id: Long): Event
 
-    fun save(id: Long, content: String): Single<Event> = Single.never()
+    suspend fun save(id: Long, content: String): Event
 
-    fun deleteById(id: Long): Completable = Completable.never()
+    suspend fun deleteById(id: Long)
 }

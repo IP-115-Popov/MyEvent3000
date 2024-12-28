@@ -1,7 +1,6 @@
 package com.eltex.lab14.presentation.adapters
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
-import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.CardEventBinding
 import com.eltex.lab14.presentation.ui.EventUiModel
 

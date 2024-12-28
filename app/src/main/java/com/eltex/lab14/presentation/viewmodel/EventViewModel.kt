@@ -1,29 +1,23 @@
 package com.eltex.lab14.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.eltex.lab14.data.Event
 import com.eltex.lab14.presentation.ui.EventUiModelMapper
 import com.eltex.lab14.repository.EventRepository
-import com.eltex.lab14.rx.SchedulersProvider
-import com.eltex.lab14.util.Callback
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.disposables.CompositeDisposable
-import io.reactivex.rxjava3.kotlin.addTo
-import io.reactivex.rxjava3.kotlin.subscribeBy
-import io.reactivex.rxjava3.schedulers.Schedulers
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class EventViewModel(
-    private val repository: EventRepository,
-    private val schedulersProvider: SchedulersProvider = SchedulersProvider.DEFAULT
+    private val repository: EventRepository
 ) : ViewModel() {
 
     private val mapper = EventUiModelMapper()
-
-    private val disposable = CompositeDisposable()
 
     private val _uiState = MutableStateFlow(EventUiState())
     val uiState: StateFlow<EventUiState> = _uiState.asStateFlow()
@@ -35,106 +29,105 @@ class EventViewModel(
     fun load() {
         _uiState.update { it.copy(status = Status.Loading) }
 
-        repository.getEvent()
-            .observeOn(schedulersProvider.computation)
-            .map {
-                it.map { event -> mapper.map(event) }
+        viewModelScope.launch {
+            try {
+                val updatedEvent = repository.getEvent()
 
-            }
-            .observeOn(schedulersProvider.mainThread)
-            .subscribeBy(
-                onSuccess = { events ->
-                    _uiState.update {
-                        it.copy(
-                            status = Status.Idle, events = events
-                        )
+                val updatedEventUiModel = withContext(Dispatchers.Default) {
+                    updatedEvent?.map { event: Event ->
+                        mapper.map(event)
                     }
-                },
-                onError = { throwable->
-                    _uiState.update { it.copy(status = Status.Error(throwable)) }
                 }
-            )
-            .addTo(disposable)
+                _uiState.update {
+                    it.copy(
+                        status = Status.Idle, events = updatedEventUiModel
+                    )
+                }
+            } catch (e: Exception) {
+                _uiState.update { it.copy(status = Status.Error(e)) }
+            }
+        }
     }
 
     fun likeById(id: Long) {
-        uiState.value.events?.find { it.id == id }?.let { event ->
-            val action = if (event.likedByMe) {
-                repository.deleteLikeById(id)
-            } else {
-                repository.likeById(id)
-            }
+        viewModelScope.launch {
+            uiState.value.events?.find { it.id == id }?.let { event ->
+                try {
+                    val event = if (event.likedByMe) {
+                        repository.deleteLikeById(id)
+                    } else {
+                        repository.likeById(id)
+                    }
 
-            action
-                .observeOn(schedulersProvider.mainThread)
-                .subscribeBy(
-                    onSuccess = { events ->
+                    withContext(Dispatchers.Default){
                         _uiState.update {
-                            load()
                             it.copy(
-                                status = Status.Idle,
+                                events = it.events?.map {
+                                    if (it.id == event.id) {
+                                        mapper.map(event)
+                                    } else {
+                                        it
+                                    }
+                                },
+                                status = Status.Idle
                             )
                         }
-                    },
-                    onError = { throwable->
-                        _uiState.update { it.copy(status = Status.Error(throwable)) }
                     }
-                )
-                .addTo(disposable)
+                } catch (e: Exception) {
+                    _uiState.update { it.copy(status = Status.Error(e)) }
+                }
+            }
         }
     }
 
     fun participateById(id: Long) {
-        uiState.value.events?.find { it.id == id }?.let {event ->
-            val action = if (event.likedByMe) {
-                repository.deleteParticipateById(id)
-            } else {
-                repository.participateById(id)
-            }
-
-            action
-                .observeOn(schedulersProvider.mainThread)
-                .subscribeBy(
-                    onSuccess = { events ->
+        viewModelScope.launch {
+            uiState.value.events?.find { it.id == id }?.let { event ->
+                try {
+                    val event = if (event.likedByMe) {
+                        repository.deleteParticipateById(id)
+                    } else {
+                        repository.participateById(id)
+                    }
+                    withContext(Dispatchers.Default){
                         _uiState.update {
-                            load()
                             it.copy(
-                                status = Status.Idle,
+                                events = it.events?.map {
+                                    if (it.id == event.id) {
+                                        mapper.map(event)
+                                    } else {
+                                        it
+                                    }
+                                },
+                                status = Status.Idle
                             )
                         }
-                    },
-                    onError = { throwable->
-                        _uiState.update { it.copy(status = Status.Error(throwable)) }
                     }
-                )
-                .addTo(disposable)
+                } catch (e: Exception) {
+                    _uiState.update { it.copy(status = Status.Error(e)) }
+                }
+
+            }
         }
     }
 
     fun deleteById(id: Long) {
-        repository.deleteById(id)
-            .observeOn(schedulersProvider.mainThread)
-            .subscribeBy(
-                onComplete = {
-                    _uiState.update {
-                        load()
-                        it.copy(
-                            status = Status.Idle,
-                        )
-                    }
-                },
-                onError = { throwable->
-                    _uiState.update { it.copy(status = Status.Error(throwable)) }
+        viewModelScope.launch {
+            try {
+                repository.deleteById(id)
+                load()
+                _uiState.update {
+                    it.copy(
+                        status = Status.Idle,
+                    )
                 }
-            )
-            .addTo(disposable)
+            } catch (e: Exception) {
+                _uiState.update { it.copy(status = Status.Error(e)) }
+            }
+        }
     }
 
     fun consumeError() {
         _uiState.update { it.copy(status = Status.Idle) }
-    }
-
-    override fun onCleared() {
-        disposable.dispose()
     }
 }

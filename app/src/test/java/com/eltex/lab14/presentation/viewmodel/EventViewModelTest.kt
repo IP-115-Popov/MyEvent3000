@@ -1,136 +1,204 @@
 package com.eltex.lab14.presentation.viewmodel
 
 import com.eltex.lab14.data.Event
-import com.eltex.lab14.repository.EventRepository
-import com.eltex.lab14.rx.SchedulersProvider
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Scheduler
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.schedulers.Schedulers
+import com.eltex.lab14.presentation.ui.EventUiModelMapper
 import org.junit.Assert.*
+import org.junit.Rule
 import org.junit.Test
+import java.lang.Thread.sleep
 
 class EventViewModelTest {
+
+    @get:Rule
+    val coroutinesRule: TestCoroutineRule = TestCoroutineRule()
+
     @Test
     fun `delete error then error in state`() {
+        // arrange
         val error = RuntimeException("test")
-        val viewModel = EventViewModel(
-            object : EventRepository {
-                override fun deleteById(id: Long): Completable =
-                    Completable.error(error)
-            },
-            TestSchedulersProvider
+        val excepted = EventUiState(
+            events = null,
+            status = Status.Error(error)
         )
+        val viewModel = EventViewModel(
+            object : TestEventRepository {
+                override suspend fun deleteById(id: Long) = throw error
+            }
+        )
+        // act
         viewModel.deleteById(1)
-        assertEquals(error, viewModel.uiState.value.status.throwableOrNull)
+        val actual = viewModel.uiState.value
+        // assert
+        assertEquals(excepted, actual)
     }
+
     @Test
     fun `delete success then idle in state`() {
-        val status = Status.Idle
-        val viewModel = EventViewModel(
-            object : EventRepository {
-                override fun deleteById(id: Long): Completable =
-                    Completable.complete()
-            },
-            TestSchedulersProvider
+        // arrange
+        val excepted = EventUiState(
+            events = null,
+            status = Status.Idle
         )
+        val viewModel = EventViewModel(
+            object : TestEventRepository {
+                override suspend fun deleteById(id: Long): Unit {}
+                override suspend fun getEvent(): List<Event>? = null
+            }
+        )
+        // act
         viewModel.deleteById(1)
-        assertEquals(status, viewModel.uiState.value.status)
+        val actual = viewModel.uiState.value
+        // assert
+        assertEquals(excepted, actual)
     }
 
 
     @Test
     fun `load error then error in state`() {
+        // arrange
         val error = RuntimeException("test")
-        val viewModel = EventViewModel(
-            object : EventRepository {
-                override fun getEvent(): Single<List<Event>> =
-                    Single.error(error)
-            },
-            TestSchedulersProvider
+        val excepted = EventUiState(
+            events = null,
+            status = Status.Error(error)
         )
+        val viewModel = EventViewModel(
+            object : TestEventRepository {
+                override suspend fun getEvent() = throw error
+            }
+        )
+        // act
         viewModel.load()
-        assertEquals(error, viewModel.uiState.value.status.throwableOrNull)
+        val actual = viewModel.uiState.value
+        // assert
+        assertEquals(excepted, actual)
     }
+
     @Test
     fun `load success then idle in state`() {
-        val status = Status.Idle
-        val viewModel = EventViewModel(
-            object : EventRepository {
-                override fun getEvent(): Single<List<Event>> =
-                    Single.just(emptyList())
-            },
-            TestSchedulersProvider
+        // arrange
+        val mapper = EventUiModelMapper()
+        val events = listOf(Event())
+        val excepted = EventUiState(
+            events = events.map {mapper.map(it)  },
+            status = Status.Idle
         )
+        val viewModel = EventViewModel(
+            object : TestEventRepository {
+                override suspend fun getEvent() = events
+            }
+        )
+        // act
         viewModel.load()
-        assertEquals(status, viewModel.uiState.value.status)
+        sleep(1000)
+        val actual = viewModel.uiState.value
+        // assert
+        assertEquals(excepted, actual)
     }
 
     @Test
     fun `likeById error then error in state`() {
+        // arrange
+        val mapper = EventUiModelMapper()
         val error = RuntimeException("test")
-        val viewModel = EventViewModel(
-            object : EventRepository {
-                override fun likeById(id: Long): Single<Event> =
-                    Single.error(error)
-                override fun getEvent(): Single<List<Event>> =
-                    Single.just(listOf(Event(id = 1)))
-            },
-            TestSchedulersProvider
+        val events = listOf(Event(id = 1))
+        val excepted = EventUiState(
+            events = events.map { mapper.map(it) },
+            status = Status.Error(error)
         )
+        val viewModel = EventViewModel(
+            object : TestEventRepository {
+                override suspend fun likeById(id: Long): Event = throw error
+                override suspend fun getEvent(): List<Event> = events
+            }
+        )
+        // act
         viewModel.load()
+        sleep(1000)
         viewModel.likeById(1)
-        assertEquals(error, viewModel.uiState.value.status.throwableOrNull)
+        sleep(1000)
+        val actual = viewModel.uiState.value
+        // assert
+        assertEquals(excepted, actual)
     }
+
     @Test
     fun `likeById success then idle in state`() {
-        val status = Status.Idle
-        val viewModel = EventViewModel(
-            object : EventRepository {
-                override fun likeById(id: Long): Single<Event> =
-                    Single.just(Event(id = 1))
-                override fun getEvent(): Single<List<Event>> =
-                    Single.just(listOf(Event(id = 1)))
-            },
-            TestSchedulersProvider
+        // arrange
+        val mapper = EventUiModelMapper()
+        val events = listOf(Event(id = 1))
+        val excepted = EventUiState(
+            events = events.map { mapper.map(it) },
+            status = Status.Idle
         )
+        val viewModel = EventViewModel(
+            object : TestEventRepository {
+                override suspend fun likeById(id: Long): Event = events.first()
+                override suspend fun getEvent(): List<Event> = events
+            }
+        )
+        // act
         viewModel.load()
+        sleep(1000)
         viewModel.likeById(1)
-        assertEquals(status, viewModel.uiState.value.status)
+        sleep(1000)
+        val actual = viewModel.uiState.value
+        // assert
+        assertEquals(excepted, actual)
     }
 
     @Test
     fun `participateById error then error in state`() {
+        // arrange
+        val mapper = EventUiModelMapper()
         val error = RuntimeException("test")
-        val viewModel = EventViewModel(
-            object : EventRepository {
-                override fun participateById(id: Long): Single<Event> =
-                    Single.error(error)
-                override fun getEvent(): Single<List<Event>> =
-                    Single.just(listOf(Event(id = 1)))
-            },
-            TestSchedulersProvider
+        val events = listOf(Event(id = 1))
+        val excepted = EventUiState(
+            events = events.map { mapper.map(it) },
+            status = Status.Error(error)
         )
+        val viewModel = EventViewModel(
+            object : TestEventRepository {
+                override suspend fun participateById(id: Long): Event = throw error
+
+                override suspend fun getEvent(): List<Event> = events
+            }
+        )
+        // act
         viewModel.load()
+        sleep(1000)
         viewModel.participateById(1)
-        assertEquals(error, viewModel.uiState.value.status.throwableOrNull)
+        sleep(1000)
+        val actual = viewModel.uiState.value
+        // assert
+        assertEquals(excepted, actual)
     }
+
     @Test
     fun `participateById success then idle in state`() {
-        val status = Status.Idle
-        val viewModel = EventViewModel(
-            object : EventRepository {
-                override fun participateById(id: Long): Single<Event> =
-                    Single.just(Event(id = 1))
-                override fun getEvent(): Single<List<Event>> =
-                    Single.just(listOf(Event(id = 1)))
-            },
-            TestSchedulersProvider
+        // arrange
+        val mapper = EventUiModelMapper()
+        val error = RuntimeException("test")
+        val events = listOf(Event(id = 1))
+        val excepted = EventUiState(
+            events = events.map { mapper.map(it) },
+            status = Status.Idle
         )
+        val viewModel = EventViewModel(
+            object : TestEventRepository {
+                override suspend fun participateById(id: Long): Event = events.first()
+
+                override suspend fun getEvent(): List<Event> = events
+
+            }
+        )
+        // act
         viewModel.load()
+        sleep(1000)
         viewModel.participateById(1)
-        assertEquals(status, viewModel.uiState.value.status)
+        sleep(1000)
+        val actual = viewModel.uiState.value
+        // assert
+        assertEquals(excepted, actual)
     }
 
 

@@ -71,15 +71,6 @@ dependencies {
 // В dependencies
     coreLibraryDesugaring(libs.desugar.jdk.libs)
 
-    // RxJava
-    implementation(libs.rxjava)
-// Функции для работы с MainThread
-    implementation(libs.rxandroid)
-// Adapter для retrofit
-    implementation(libs.adapter.rxjava3)
-// Полезные экстеншены для Kotlin
-    implementation(libs.rxkotlin)
-
     implementation(libs.converter.kotlinx.serialization)
 
     implementation(libs.retrofit)
@@ -109,4 +100,5 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.kotlinx.coroutines.test)
 }

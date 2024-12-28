@@ -11,9 +11,9 @@ data class Event(
     @SerialName("content") val content: String = "",
 
     @Serializable(with = InstantSerializer::class)
-    @SerialName("published") val published: Instant = Instant.now(),
+    @SerialName("published") val published: Instant = Instant.EPOCH,
     @Serializable(with = InstantSerializer::class)
-    @SerialName("datetime") val datetime: Instant = Instant.now(),
+    @SerialName("datetime") val datetime: Instant = Instant.EPOCH,
 
     @SerialName("likedByMe") val likedByMe: Boolean = false,
     @SerialName("participateByMe") val participateByMe: Boolean = false,

@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import com.eltex.lab14.R
-import com.eltex.lab14.data.Event
 import com.eltex.lab14.databinding.FragmentPostBinding
 import com.eltex.lab14.presentation.adapters.EventAdapter
 import com.eltex.lab14.presentation.adapters.OffsetDecoration

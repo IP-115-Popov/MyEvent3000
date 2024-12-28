@@ -1,9 +1,6 @@
 package com.eltex.lab14.api
 
 import com.eltex.lab14.data.Event
-import io.reactivex.rxjava3.core.Completable
-import io.reactivex.rxjava3.core.Single
-import retrofit2.Call
 import retrofit2.create
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -13,25 +10,25 @@ import retrofit2.http.Path
 
 interface EventApi {
     @GET("api/events")
-    fun getAll(): Single<List<Event>>
+    suspend fun getAll(): List<Event>
 
     @POST("api/events")
-    fun savEvent(@Body event: Event): Single<Event>
+    suspend fun savEvent(@Body event: Event): Event
 
     @POST("api/events/{id}/likes")
-    fun likeById(@Path("id") id: Long): Single<Event>
+    suspend fun likeById(@Path("id") id: Long): Event
 
     @DELETE("api/events/{id}/likes")
-    fun deleteLikeById(@Path("id") id: Long): Single<Event>
+    suspend fun deleteLikeById(@Path("id") id: Long): Event
 
     @POST("api/events/{id}/participants")
-    fun participateById(@Path("id") id: Long): Single<Event>
+    suspend fun participateById(@Path("id") id: Long): Event
 
     @DELETE("api/events/{id}/participants")
-    fun deleteParticipateById(@Path("id") id: Long): Single<Event>
+    suspend fun deleteParticipateById(@Path("id") id: Long): Event
 
     @DELETE("api/events/{id}")
-    fun deleteById(@Path("id") id: Long): Completable
+    suspend fun deleteById(@Path("id") id: Long)
 
 
     companion object {

@@ -3,7 +3,6 @@ package com.eltex.lab14.api
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 
 object RetrofitFactory {
@@ -16,7 +15,6 @@ object RetrofitFactory {
         Retrofit.Builder()
             .client(OkHttpClientFactory.INSTANCE)
             .baseUrl("https://eltex-android.ru/")
-            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
     }

@@ -1,6 +1,5 @@
 package com.eltex.lab14.presentation.viewmodel
 
-import com.eltex.lab14.data.Event
 import com.eltex.lab14.presentation.ui.EventUiModel
 
 data class EventUiState(
