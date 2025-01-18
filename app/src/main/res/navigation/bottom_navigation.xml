@@ -7,17 +7,17 @@
 
     <fragment
         android:id="@+id/postFragment"
-        android:name="com.eltex.lab14.fragments.PostFragment"
+        android:name="com.eltex.lab14.feature.events.fragment.PostFragment"
         android:label="fragment_post"
         tools:layout="@layout/fragment_post" />
     <fragment
         android:id="@+id/userFragment"
-        android:name="com.eltex.lab14.fragments.UserFragment"
+        android:name="com.eltex.lab14.presentation.fragments.UserFragment"
         android:label="fragment_user"
         tools:layout="@layout/fragment_user" />
     <fragment
         android:id="@+id/eventFragment"
-        android:name="com.eltex.lab14.fragments.EventFragment"
+        android:name="com.eltex.lab14.feature.events.fragment.EventFragment"
         android:label="fragment_event"
         tools:layout="@layout/fragment_event" />
 </navigation>

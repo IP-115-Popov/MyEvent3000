@@ -2,7 +2,7 @@ package com.eltex.lab14.presentation.adapters
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.eltex.lab14.databinding.CardEventBinding
-import com.eltex.lab14.presentation.ui.EventUiModel
+import com.eltex.lab14.feature.events.ui.EventUiModel
 
 class EventViewHolder(val binding: CardEventBinding) : ViewHolder(binding.root) {
     fun bind(event: EventUiModel) {

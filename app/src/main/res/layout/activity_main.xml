@@ -5,6 +5,6 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:name="com.eltex.lab14.fragments.ToolbarFragment"
+    android:name="com.eltex.lab14.feature.toolbar.fragment.ToolbarFragment"
     tools:context=".presentation.activity.MainActivity"
     />

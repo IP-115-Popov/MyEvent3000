@@ -9,7 +9,7 @@ import com.eltex.lab14.R
 import com.eltex.lab14.databinding.CardEventBinding
 import com.eltex.lab14.databinding.DataHederBinding
 import com.eltex.lab14.presentation.animator.ButtonAnimator
-import com.eltex.lab14.presentation.ui.EventUiModel
+import com.eltex.lab14.feature.events.ui.EventUiModel
 
 class EventAdapter(
     private val listener: EventListener

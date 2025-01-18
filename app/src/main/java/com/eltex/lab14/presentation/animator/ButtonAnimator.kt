@@ -2,7 +2,7 @@ package com.eltex.lab14.presentation.animator
 
 import android.animation.ObjectAnimator
 import android.view.View
-import com.eltex.lab14.Constants
+import com.eltex.lab14.util.Constants
 
 object ButtonAnimator {
     fun animationRotate(view: View) {

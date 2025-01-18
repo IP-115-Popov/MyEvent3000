@@ -1,7 +1,7 @@
 package com.eltex.lab14.presentation.viewmodel
 
-import com.eltex.lab14.data.Event
-import com.eltex.lab14.repository.EventRepository
+import com.eltex.lab14.feature.events.data.Event
+import com.eltex.lab14.feature.events.repository.EventRepository
 
 interface TestEventRepository: EventRepository {
     override suspend fun getEvent(): List<Event>? = error("Not mocked")

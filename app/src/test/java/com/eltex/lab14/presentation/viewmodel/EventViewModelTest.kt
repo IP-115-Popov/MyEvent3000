@@ -1,7 +1,10 @@
 package com.eltex.lab14.presentation.viewmodel
 
-import com.eltex.lab14.data.Event
-import com.eltex.lab14.presentation.ui.EventUiModelMapper
+import com.eltex.lab14.feature.events.data.Event
+import com.eltex.lab14.feature.events.viewmodel.EventUiState
+import com.eltex.lab14.feature.events.viewmodel.EventViewModel
+import com.eltex.lab14.feature.events.ui.EventUiModelMapper
+import com.eltex.lab14.util.Status
 import org.junit.Assert.*
 import org.junit.Rule
 import org.junit.Test
