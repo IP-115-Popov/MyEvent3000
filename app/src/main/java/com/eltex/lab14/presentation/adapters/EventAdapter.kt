@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.CardEventBinding
 import com.eltex.lab14.databinding.DataHederBinding
-import com.eltex.lab14.presentation.animator.ButtonAnimator
 import com.eltex.lab14.feature.events.ui.EventUiModel
+import com.eltex.lab14.presentation.animator.ButtonAnimator
 
 class EventAdapter(
     private val listener: EventListener
@@ -28,7 +28,8 @@ class EventAdapter(
     private val ITEM_VIEW_TYPE = 1
 
     fun submitEventList(events: List<EventUiModel>) {
-        val items = events.groupBy { it.published } // Группируем по дате публикации (или любому другому признаку)
+        val items =
+            events.groupBy { it.published } // Группируем по дате публикации (или любому другому признаку)
         super.submitList(
             items.flatMap { (publishedDate, eventList) ->
                 listOf(EventItem.Header(publishedDate)) + eventList.map(EventItem::Event)

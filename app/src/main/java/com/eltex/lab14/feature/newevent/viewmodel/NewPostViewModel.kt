@@ -2,8 +2,8 @@ package com.eltex.lab14.feature.newevent.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.eltex.lab14.util.Status
 import com.eltex.lab14.feature.events.repository.EventRepository
+import com.eltex.lab14.util.Status
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update

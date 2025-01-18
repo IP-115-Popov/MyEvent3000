@@ -15,12 +15,12 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.FragmentPostBinding
-import com.eltex.lab14.presentation.adapters.EventAdapter
-import com.eltex.lab14.presentation.adapters.OffsetDecoration
+import com.eltex.lab14.feature.events.repository.NetworkEventsRepository
 import com.eltex.lab14.feature.events.ui.EventUiModel
 import com.eltex.lab14.feature.events.viewmodel.EventViewModel
 import com.eltex.lab14.feature.newevent.fragment.NewPostFragment
-import com.eltex.lab14.feature.events.repository.NetworkEventsRepository
+import com.eltex.lab14.presentation.adapters.EventAdapter
+import com.eltex.lab14.presentation.adapters.OffsetDecoration
 import com.eltex.lab14.util.getErrorText
 import com.eltex.lab14.utils.share
 import kotlinx.coroutines.flow.launchIn

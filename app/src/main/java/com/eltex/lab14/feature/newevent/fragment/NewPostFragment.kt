@@ -18,9 +18,9 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.FragmentNewPostBinding
+import com.eltex.lab14.feature.events.repository.NetworkEventsRepository
 import com.eltex.lab14.feature.newevent.viewmodel.NewPostViewModel
 import com.eltex.lab14.feature.toolbar.viewmodel.ToolbarViewModel
-import com.eltex.lab14.feature.events.repository.NetworkEventsRepository
 import com.eltex.lab14.util.getErrorText
 import com.eltex.lab14.utils.toast
 import kotlinx.coroutines.flow.filter

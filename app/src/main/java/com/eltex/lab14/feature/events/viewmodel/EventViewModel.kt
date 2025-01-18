@@ -3,9 +3,9 @@ package com.eltex.lab14.feature.events.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eltex.lab14.feature.events.data.Event
+import com.eltex.lab14.feature.events.repository.EventRepository
 import com.eltex.lab14.feature.events.ui.EventUiModelMapper
 import com.eltex.lab14.util.Status
-import com.eltex.lab14.feature.events.repository.EventRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -60,7 +60,7 @@ class EventViewModel(
                         repository.likeById(id)
                     }
 
-                    withContext(Dispatchers.Default){
+                    withContext(Dispatchers.Default) {
                         _uiState.update {
                             it.copy(
                                 events = it.events?.map {
@@ -90,7 +90,7 @@ class EventViewModel(
                     } else {
                         repository.participateById(id)
                     }
-                    withContext(Dispatchers.Default){
+                    withContext(Dispatchers.Default) {
                         _uiState.update {
                             it.copy(
                                 events = it.events?.map {
