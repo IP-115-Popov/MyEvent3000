@@ -19,7 +19,7 @@ import androidx.navigation.fragment.findNavController
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.FragmentNewPostBinding
 import com.eltex.lab14.feature.events.repository.NetworkEventsRepository
-import com.eltex.lab14.feature.newevent.viewmodel.NewPostViewModel
+import com.eltex.lab14.feature.newevent.viewmodel.NewEventViewModel
 import com.eltex.lab14.feature.toolbar.viewmodel.ToolbarViewModel
 import com.eltex.lab14.util.getErrorText
 import com.eltex.lab14.utils.toast
@@ -28,7 +28,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 
-class NewPostFragment : Fragment() {
+class NewEventFragment : Fragment() {
 
 
     companion object {
@@ -50,12 +50,12 @@ class NewPostFragment : Fragment() {
 
         binding.etvContent.setText(content)
 
-        val newPostViewModel by viewModels<NewPostViewModel> {
+        val newPostViewModel by viewModels<NewEventViewModel> {
             viewModelFactory {
                 addInitializer(
-                    NewPostViewModel::class
+                    NewEventViewModel::class
                 ) {
-                    NewPostViewModel(
+                    NewEventViewModel(
                         NetworkEventsRepository(), postId
                     )
                 }

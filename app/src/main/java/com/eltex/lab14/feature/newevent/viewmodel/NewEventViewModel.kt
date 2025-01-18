@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class NewPostViewModel(
+class NewEventViewModel(
     private val repository: EventRepository,
     private val id: Long = 0,
 ) : ViewModel() {
