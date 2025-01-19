@@ -67,28 +67,19 @@ android {
 }
 
 dependencies {
-
-// В dependencies
     coreLibraryDesugaring(libs.desugar.jdk.libs)
-
     implementation(libs.converter.kotlinx.serialization)
-
     implementation(libs.retrofit)
-
     implementation(libs.androidx.swiperefreshlayout)
-
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
-
     implementation(libs.androidx.room.ktx)
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     ksp(libs.androidx.room.compiler)
-
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
-
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.lifecycle.viewmodel.ktx)
@@ -101,4 +92,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.kotlinx.coroutines.test)
+    implementation(libs.arrow.core)
 }

@@ -1,20 +1,17 @@
 package com.eltex.lab14.feature.events.viewmodel
 
 import com.eltex.lab14.feature.events.ui.EventUiModel
-import com.eltex.lab14.util.Status
 
 data class EventUiState(
-    val events: List<EventUiModel>? = null, val status: Status = Status.Idle
+    val events: List<EventUiModel> = emptyList(),
+    val status: EventStatus = EventStatus.Idle,
+    val singleError: Throwable? = null
 ) {
-    val isRefreshing: Boolean
-        get() = status == Status.Loading && events?.isNotEmpty() == true
+    val isEmptyError: Boolean = status is EventStatus.EmptyError
 
-    val isEmptyLoading: Boolean
-        get() = status == Status.Loading && events.isNullOrEmpty()
+    val isRefreshing: Boolean = status == EventStatus.Refreshing
 
-    val isRefreshError: Boolean
-        get() = status is Status.Error && events?.isNotEmpty() == true
+    val emptyError: Throwable? = (status as? EventStatus.EmptyError)?.reason
 
-    val isEmptyError: Boolean
-        get() = status is Status.Error && events.isNullOrEmpty()
+    val isEmptyLoading: Boolean = status == EventStatus.EmptyLoading
 }

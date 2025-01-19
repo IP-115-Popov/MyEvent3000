@@ -13,10 +13,17 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.FragmentPostBinding
+import com.eltex.lab14.feature.events.effecthandler.EventEffectHandler
+import com.eltex.lab14.feature.events.reducer.EventReducer
 import com.eltex.lab14.feature.events.repository.NetworkEventsRepository
 import com.eltex.lab14.feature.events.ui.EventUiModel
+import com.eltex.lab14.feature.events.ui.EventUiModelMapper
+import com.eltex.lab14.feature.events.viewmodel.EventMessage
+import com.eltex.lab14.feature.events.viewmodel.EventStore
+import com.eltex.lab14.feature.events.viewmodel.EventUiState
 import com.eltex.lab14.feature.events.viewmodel.EventViewModel
 import com.eltex.lab14.feature.newevent.fragment.NewEventFragment
 import com.eltex.lab14.presentation.adapters.EventAdapter
@@ -37,7 +44,15 @@ class EventFragment : Fragment() {
             viewModelFactory {
                 addInitializer(EventViewModel::class) {
                     EventViewModel(
-                        NetworkEventsRepository()
+                        EventStore(
+                            EventReducer(),
+                            EventEffectHandler(
+                                NetworkEventsRepository(),
+                                EventUiModelMapper()
+                            ),
+                            setOf(EventMessage.Refresh),
+                            EventUiState()
+                        )
                     )
                 }
             }
@@ -46,16 +61,17 @@ class EventFragment : Fragment() {
         requireActivity().supportFragmentManager.setFragmentResultListener(
             NewEventFragment.POST_CREATED_KEY, viewLifecycleOwner
         ) { _, _ ->
-            viewModel.load()
+            viewModel.accept(EventMessage.Refresh)
         }
 
         val adapter = EventAdapter(object : EventAdapter.EventListener {
             override fun likeClickListener(event: EventUiModel) {
-                viewModel.likeById(event.id)
+                viewModel.accept(EventMessage.Like(event))
             }
 
             override fun participateClickListener(event: EventUiModel) {
-                viewModel.participateById(event.id)
+                //TODO
+                //viewModel.participateById(event.id)
             }
 
             override fun shareClickListener(event: EventUiModel) {
@@ -65,7 +81,7 @@ class EventFragment : Fragment() {
             override fun menuClickListener() {}
 
             override fun onDeleteClickListener(event: EventUiModel) {
-                viewModel.deleteById(event.id)
+                viewModel.accept(EventMessage.Delete(event))
             }
 
             override fun onUpdateClickListener(event: EventUiModel) {
@@ -82,29 +98,44 @@ class EventFragment : Fragment() {
         binding.recyclerView.adapter = adapter
 
         binding.bthRetry.setOnClickListener {
-            viewModel.load()
+            viewModel.accept(EventMessage.Refresh)
         }
 
         binding.swipeRefresh.setOnRefreshListener {
-            viewModel.load()
+            viewModel.accept(EventMessage.Refresh)
         }
 
+        binding.recyclerView.addOnChildAttachStateChangeListener(
+            object : RecyclerView.OnChildAttachStateChangeListener {
+                override fun onChildViewAttachedToWindow(view: View) {
+                    val itemsCount = adapter.itemCount
+                    val adapterPosition = binding.recyclerView.getChildAdapterPosition(view)
+
+                    if (itemsCount - 1 == adapterPosition) {
+                        viewModel.accept(EventMessage.LoadNextPage)
+                    }
+                }
+
+                override fun onChildViewDetachedFromWindow(view: View) = Unit
+            }
+        )
         viewModel.uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach { state ->
             binding.errorGroup.isVisible = state.isEmptyError
-            val errorText = state.status.throwableOrNull?.getErrorText(requireContext())
+            val errorText = state.emptyError?.getErrorText(requireContext())
             binding.tvError.text = errorText
 
             binding.progress.isVisible = state.isEmptyLoading
 
             binding.swipeRefresh.isRefreshing = state.isRefreshing
 
-            if (state.isRefreshError) {
-                Toast.makeText(requireContext(), errorText, Toast.LENGTH_SHORT).show()
+            if (state.singleError != null) {
+                val singleErrorText = state.singleError.getErrorText(requireContext())
+                Toast.makeText(requireContext(), singleErrorText, Toast.LENGTH_SHORT).show()
 
-                viewModel.consumeError()
+                viewModel.accept(EventMessage.HandleError)
             }
 
-            state.events?.let { adapter.submitEventList(it) }
+            adapter.submitEventList(state.events)
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 

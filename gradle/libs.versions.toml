@@ -1,5 +1,6 @@
 [versions]
 agp = "8.7.1"
+arrowCore = "1.2.4"
 converterKotlinxSerialization = "2.11.0"
 datastorePreferences = "1.1.1"
 desugar_jdk_libs = "2.1.4"
@@ -31,6 +32,7 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomKtx" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-swiperefreshlayout = { module = "androidx.swiperefreshlayout:swiperefreshlayout", version.ref = "swiperefreshlayout" }
+arrow-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrowCore" }
 converter-kotlinx-serialization = { module = "com.squareup.retrofit2:converter-kotlinx-serialization", version.ref = "converterKotlinxSerialization" }
 desugar_jdk_libs = { module = "com.android.tools:desugar_jdk_libs", version.ref = "desugar_jdk_libs" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }

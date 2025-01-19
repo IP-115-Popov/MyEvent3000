@@ -7,8 +7,15 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface EventApi {
+    @GET("api/events/{id}/before")
+    suspend fun getBefore(@Path("id") id: Long, @Query("count") count: Int): List<Event>
+
+    @GET("api/events/latest")
+    suspend fun getLatest(@Query("count") count: Int): List<Event>
+
     @GET("api/events")
     suspend fun getAll(): List<Event>
 
