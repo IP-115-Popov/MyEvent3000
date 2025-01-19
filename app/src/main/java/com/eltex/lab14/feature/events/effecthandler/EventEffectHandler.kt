@@ -65,7 +65,7 @@ class EventEffectHandler(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun handleLike(effects: Flow<EventEffect>) =
-        effects.filterIsInstance<EventEffect.Delete>().mapLatest {
+        effects.filterIsInstance<EventEffect.Like>().mapLatest {
             EventMessage.LikeResult(
                 try {
                     Either.Right(
