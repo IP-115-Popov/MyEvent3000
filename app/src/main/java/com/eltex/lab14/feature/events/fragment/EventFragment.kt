@@ -70,8 +70,7 @@ class EventFragment : Fragment() {
             }
 
             override fun participateClickListener(event: EventUiModel) {
-                //TODO
-                //viewModel.participateById(event.id)
+                viewModel.accept(EventMessage.Participate(event))
             }
 
             override fun shareClickListener(event: EventUiModel) {

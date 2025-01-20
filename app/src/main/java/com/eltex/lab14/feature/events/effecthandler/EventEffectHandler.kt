@@ -23,7 +23,8 @@ class EventEffectHandler(
         handleNextPage(effects),
         handleInitialPage(effects),
         handleDelete(effects),
-        handleLike(effects)
+        handleLike(effects),
+        handleParticipate(effects)
     ).merge()
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -74,6 +75,26 @@ class EventEffectHandler(
                                 repository.deleteLikeById(it.event.id)
                             } else {
                                 repository.likeById(it.event.id)
+                            }
+                        )
+                    )
+                } catch (e: Exception) {
+                    if (e is CancellationException) throw e
+                    Either.Left(EventWithError(it.event, e))
+                }
+            )
+        }
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun handleParticipate(effects: Flow<EventEffect>) =
+        effects.filterIsInstance<EventEffect.Participate>().mapLatest {
+            EventMessage.ParticipateResult(
+                try {
+                    Either.Right(
+                        eventMapper.map(
+                            if (it.event.participateByMe) {
+                                repository.deleteParticipateById(it.event.id)
+                            } else {
+                                repository.participateById(it.event.id)
                             }
                         )
                     )

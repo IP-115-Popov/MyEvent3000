@@ -124,5 +124,50 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
             ),
             EventEffect.LoadInitialPage(PAGE_SIZE),
         )
+
+        is EventMessage.Participate -> ReducerResult(
+            old.copy(
+                events = old.events.map {
+                    if (it.id == message.event.id) {
+                        it.copy(
+                            participateByMe = !it.participateByMe
+                        )
+                    } else {
+                        it
+                    }
+                }
+            )
+        )
+        is EventMessage.ParticipateResult ->  ReducerResult(
+            when (val messageResult = message.result) {
+                is Either.Left -> {
+                    val value = messageResult.value
+                    val event = value.event
+                    old.copy(
+                        events = old.events.map {
+                            if (it.id == event.id) {
+                                event
+                            } else {
+                                it
+                            }
+                        },
+                        singleError = value.throwable
+                    )
+                }
+
+                is Either.Right -> {
+                    val event = messageResult.value
+                    old.copy(
+                        events = old.events.map {
+                            if (it.id == event.id) {
+                                event
+                            } else {
+                                it
+                            }
+                        }
+                    )
+                }
+            }
+        )
     }
 }
