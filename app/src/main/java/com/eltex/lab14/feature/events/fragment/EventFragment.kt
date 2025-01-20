@@ -110,7 +110,7 @@ class EventFragment : Fragment() {
                     val itemsCount = adapter.itemCount
                     val adapterPosition = binding.recyclerView.getChildAdapterPosition(view)
 
-                    if (itemsCount - 1 == adapterPosition) {
+                    if (itemsCount - 3 == adapterPosition) {
                         viewModel.accept(EventMessage.LoadNextPage)
                     }
                 }
