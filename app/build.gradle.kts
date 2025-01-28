@@ -93,4 +93,5 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.kotlinx.coroutines.test)
     implementation(libs.arrow.core)
+    implementation(libs.shimmer)
 }

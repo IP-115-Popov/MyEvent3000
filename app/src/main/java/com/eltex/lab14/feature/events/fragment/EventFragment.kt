@@ -29,6 +29,7 @@ import com.eltex.lab14.feature.events.viewmodel.EventViewModel
 import com.eltex.lab14.feature.newevent.fragment.NewEventFragment
 import com.eltex.lab14.feature.events.adapters.EventAdapter
 import com.eltex.lab14.feature.events.adapters.OffsetDecoration
+import com.eltex.lab14.feature.events.viewmodel.EventStatus
 import com.eltex.lab14.util.getErrorText
 import com.eltex.lab14.utils.share
 import kotlinx.coroutines.flow.launchIn
@@ -41,18 +42,16 @@ class EventFragment : Fragment() {
 
         val binding = FragmentPostBinding.inflate(inflater, container, false)
 
+        val skeleton = binding.skeletonViewController
+
         val viewModel by viewModels<EventViewModel> {
             viewModelFactory {
                 addInitializer(EventViewModel::class) {
                     EventViewModel(
                         EventStore(
-                            EventReducer(),
-                            EventEffectHandler(
-                                NetworkEventsRepository(),
-                                EventUiModelMapper()
-                            ),
-                            setOf(EventMessage.Refresh),
-                            EventUiState()
+                            EventReducer(), EventEffectHandler(
+                                NetworkEventsRepository(), EventUiModelMapper()
+                            ), setOf(EventMessage.Refresh), EventUiState()
                         )
                     )
                 }
@@ -105,26 +104,31 @@ class EventFragment : Fragment() {
             viewModel.accept(EventMessage.Refresh)
         }
 
-        binding.recyclerView.addOnChildAttachStateChangeListener(
-            object : RecyclerView.OnChildAttachStateChangeListener {
-                override fun onChildViewAttachedToWindow(view: View) {
-                    val itemsCount = adapter.itemCount
-                    val adapterPosition = binding.recyclerView.getChildAdapterPosition(view)
+        binding.recyclerView.addOnChildAttachStateChangeListener(object :
+            RecyclerView.OnChildAttachStateChangeListener {
+            override fun onChildViewAttachedToWindow(view: View) {
+                val itemsCount = adapter.itemCount
+                val adapterPosition = binding.recyclerView.getChildAdapterPosition(view)
 
-                    if (itemsCount - 3  == adapterPosition) {
-                        viewModel.accept(EventMessage.LoadNextPage)
-                    }
+                if (itemsCount - 3 == adapterPosition) {
+                    viewModel.accept(EventMessage.LoadNextPage)
                 }
-
-                override fun onChildViewDetachedFromWindow(view: View) = Unit
             }
-        )
+
+            override fun onChildViewDetachedFromWindow(view: View) = Unit
+        })
         viewModel.uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach { state ->
+            if (state.status is EventStatus.EmptyLoading) {
+                skeleton.startShimmer()
+                skeleton.visibility = View.VISIBLE
+            } else {
+                skeleton.stopShimmer()
+                skeleton.visibility = View.GONE
+            }
+
             binding.errorGroup.isVisible = state.isEmptyError
             val errorText = state.emptyError?.getErrorText(requireContext())
             binding.tvError.text = errorText
-
-            binding.progress.isVisible = state.isEmptyLoading
 
             binding.swipeRefresh.isRefreshing = state.isRefreshing
 

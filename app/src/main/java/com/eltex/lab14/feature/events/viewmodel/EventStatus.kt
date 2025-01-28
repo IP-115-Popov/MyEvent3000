@@ -1,7 +1,7 @@
 package com.eltex.lab14.feature.events.viewmodel
 
 sealed interface EventStatus {
-    data object Idle : EventStatus
+    data class Idle(val loadingFinished: Boolean = false) : EventStatus
     data object Refreshing : EventStatus
     data object EmptyLoading : EventStatus
     data object NextPageLoading : EventStatus

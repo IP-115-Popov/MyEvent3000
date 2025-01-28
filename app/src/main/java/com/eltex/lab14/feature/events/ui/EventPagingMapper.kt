@@ -15,7 +15,7 @@ object EventPagingMapper {
             is EventStatus.NextPageError -> event + PagingModel.Error(statusValue.reason)
             is EventStatus.EmptyError,
             EventStatus.EmptyLoading,
-            EventStatus.Idle,
+            is EventStatus.Idle,
             EventStatus.Refreshing -> event
         }
     }

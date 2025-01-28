@@ -8,6 +8,21 @@
     android:layout_height="match_parent"
     tools:context=".presentation.activity.MainActivity">
 
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/skeleton_view_controller"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include layout="@layout/card_event_skeleton"/>
+            <include layout="@layout/card_event_skeleton"/>
+            <include layout="@layout/card_event_skeleton"/>
+            <include layout="@layout/card_event_skeleton"/>
+        </LinearLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefresh"
         android:layout_width="0dp"
@@ -29,15 +44,6 @@
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <ProgressBar
-        android:id="@+id/progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <TextView
         android:id="@+id/tvError"
         tools:text="Network Error"
@@ -57,7 +63,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tvError"/>
-    
+
     <androidx.constraintlayout.widget.Group
         android:id="@+id/errorGroup"
         android:layout_width="wrap_content"

@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:context=".presentation.activity.MainActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <View
+            android:id="@+id/tv_isOnline"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@color/gray"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_data_send" />
+
+        <ImageView
+            android:id="@+id/imv_avatar"
+            android:layout_width="@dimen/avatar_size"
+            android:layout_height="@dimen/avatar_size"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/avatar_description"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_data_send"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_author"
+            app:srcCompat="@drawable/avatar_background"
+            app:tint="@color/gray" />
+
+        <View
+            android:id="@+id/tv_author"
+            android:layout_width="0dp"
+            android:layout_height="20dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="4dp"
+            android:background="@color/gray"
+            app:layout_constraintEnd_toStartOf="@+id/imv_menu"
+            app:layout_constraintStart_toEndOf="@+id/imv_avatar"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/tv_data_send"
+            android:layout_width="130dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="4dp"
+            android:background="@color/gray"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/tv_author"
+            app:layout_constraintTop_toBottomOf="@+id/tv_author" />
+
+        <ImageView
+            android:id="@+id/imv_menu"
+            android:layout_width="@dimen/tool_bar_size"
+            android:layout_height="@dimen/tool_bar_size"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/menu_description"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_data_send"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_author"
+            app:srcCompat="@drawable/baseline_more_vert_24" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bthLike"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="122dp"
+            android:textColor="@color/gray"
+            app:icon="@drawable/like_button"
+            app:iconSize="18dp"
+            app:iconTint="@color/gray"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_isOnline"
+            tools:text="10" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bthShare"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            app:icon="@drawable/share"
+            app:iconSize="18dp"
+            app:iconTint="@color/gray"
+            app:layout_constraintBottom_toBottomOf="@+id/bthLike"
+            app:layout_constraintStart_toEndOf="@id/bthLike" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>

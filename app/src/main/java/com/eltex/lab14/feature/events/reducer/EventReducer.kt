@@ -38,30 +38,28 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
             when (val messageResult = message.result) {
                 is Either.Left -> {
                     if (old.events.isNotEmpty()) {
-                        old.copy(singleError = messageResult.value, status = EventStatus.Idle)
+                        old.copy(singleError = messageResult.value, status = EventStatus.Idle())
                     } else {
                         old.copy(status = EventStatus.EmptyError(messageResult.value))
                     }
                 }
 
-                is Either.Right -> old.copy(events = messageResult.value, status = EventStatus.Idle)
+                is Either.Right -> old.copy(
+                    events = messageResult.value, status = EventStatus.Idle()
+                )
             }
         )
 
-        is EventMessage.Like -> ReducerResult(
-            old.copy(
-                events = old.events.map {
-                    if (it.id == message.event.id) {
-                        it.copy(
-                            likedByMe = !it.likedByMe,
-                            likes = if (it.likedByMe) it.likes - 1 else it.likes + 1
-                        )
-                    } else {
-                        it
-                    }
-                }
-            )
-        )
+        is EventMessage.Like -> ReducerResult(old.copy(events = old.events.map {
+            if (it.id == message.event.id) {
+                it.copy(
+                    likedByMe = !it.likedByMe,
+                    likes = if (it.likedByMe) it.likes - 1 else it.likes + 1
+                )
+            } else {
+                it
+            }
+        }))
 
         is EventMessage.LikeResult -> ReducerResult(
             when (val messageResult = message.result) {
@@ -75,32 +73,41 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
                             } else {
                                 it
                             }
-                        },
-                        singleError = value.throwable
+                        }, singleError = value.throwable
                     )
                 }
 
                 is Either.Right -> {
                     val event = messageResult.value
-                    old.copy(
-                        events = old.events.map {
-                            if (it.id == event.id) {
-                                event
-                            } else {
-                                it
-                            }
+                    old.copy(events = old.events.map {
+                        if (it.id == event.id) {
+                            event
+                        } else {
+                            it
                         }
-                    )
+                    })
                 }
             }
         )
 
-        EventMessage.LoadNextPage -> ReducerResult(
-            old.copy(
-                status = EventStatus.NextPageLoading
-            ),
-            EventEffect.LoadNextPage(old.events.last().id, PAGE_SIZE),
-        )
+        EventMessage.LoadNextPage -> {
+            val loadingFinished = (old.status as? EventStatus.Idle)?.loadingFinished == true
+            val effect = if (loadingFinished) {
+                null
+            } else {
+                EventEffect.LoadNextPage(old.events.last().id, PAGE_SIZE)
+            }
+
+            val status = if (loadingFinished) {
+                old.status
+            } else {
+                EventStatus.NextPageLoading
+            }
+
+            ReducerResult(
+                old.copy(status = status), effect
+            )
+        }
 
         is EventMessage.NextPageLoaded -> ReducerResult(
             when (val messageResult = message.result) {
@@ -109,7 +116,12 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
                 }
 
                 is Either.Right -> {
-                    old.copy(events = old.events + messageResult.value, status = EventStatus.Idle)
+                    val eventUiModels = messageResult.value
+                    val loadingFinished = eventUiModels.size < PAGE_SIZE
+                    old.copy(
+                        events = old.events + messageResult.value,
+                        status = EventStatus.Idle(loadingFinished)
+                    )
                 }
             }
         )
@@ -125,20 +137,17 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
             EventEffect.LoadInitialPage(PAGE_SIZE),
         )
 
-        is EventMessage.Participate -> ReducerResult(
-            old.copy(
-                events = old.events.map {
-                    if (it.id == message.event.id) {
-                        it.copy(
-                            participateByMe = !it.participateByMe
-                        )
-                    } else {
-                        it
-                    }
-                }
-            )
-        )
-        is EventMessage.ParticipateResult ->  ReducerResult(
+        is EventMessage.Participate -> ReducerResult(old.copy(events = old.events.map {
+            if (it.id == message.event.id) {
+                it.copy(
+                    participateByMe = !it.participateByMe
+                )
+            } else {
+                it
+            }
+        }))
+
+        is EventMessage.ParticipateResult -> ReducerResult(
             when (val messageResult = message.result) {
                 is Either.Left -> {
                     val value = messageResult.value
@@ -150,22 +159,19 @@ class EventReducer : Reducer<EventUiState, EventEffect, EventMessage> {
                             } else {
                                 it
                             }
-                        },
-                        singleError = value.throwable
+                        }, singleError = value.throwable
                     )
                 }
 
                 is Either.Right -> {
                     val event = messageResult.value
-                    old.copy(
-                        events = old.events.map {
-                            if (it.id == event.id) {
-                                event
-                            } else {
-                                it
-                            }
+                    old.copy(events = old.events.map {
+                        if (it.id == event.id) {
+                            event
+                        } else {
+                            it
                         }
-                    )
+                    })
                 }
             }
         )
