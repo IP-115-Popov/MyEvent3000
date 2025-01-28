@@ -13,7 +13,6 @@ import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.FragmentPostBinding
 import com.eltex.lab14.feature.events.adapters.EventAdapter
@@ -31,6 +30,7 @@ import com.eltex.lab14.feature.events.viewmodel.EventUiState
 import com.eltex.lab14.feature.events.viewmodel.EventViewModel
 import com.eltex.lab14.feature.newevent.fragment.NewEventFragment
 import com.eltex.lab14.util.getErrorText
+import com.eltex.lab14.utils.loadMoreOnScroll
 import com.eltex.lab14.utils.share
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -104,19 +104,10 @@ class EventFragment : Fragment() {
             viewModel.accept(EventMessage.Refresh)
         }
 
-        binding.recyclerView.addOnChildAttachStateChangeListener(object :
-            RecyclerView.OnChildAttachStateChangeListener {
-            override fun onChildViewAttachedToWindow(view: View) {
-                val itemsCount = adapter.itemCount
-                val adapterPosition = binding.recyclerView.getChildAdapterPosition(view)
+        binding.recyclerView.loadMoreOnScroll {
+            viewModel.accept(EventMessage.LoadNextPage)
+        }
 
-                if (itemsCount - 3 == adapterPosition) {
-                    viewModel.accept(EventMessage.LoadNextPage)
-                }
-            }
-
-            override fun onChildViewDetachedFromWindow(view: View) = Unit
-        })
         viewModel.uiState.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach { state ->
             if (state.status is EventStatus.EmptyLoading) {
                 skeleton.startShimmer()
