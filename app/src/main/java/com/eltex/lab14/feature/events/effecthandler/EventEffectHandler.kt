@@ -84,6 +84,7 @@ class EventEffectHandler(
                 }
             )
         }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun handleParticipate(effects: Flow<EventEffect>) =
         effects.filterIsInstance<EventEffect.Participate>().mapLatest {

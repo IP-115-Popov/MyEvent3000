@@ -16,6 +16,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.FragmentPostBinding
+import com.eltex.lab14.feature.events.adapters.EventAdapter
+import com.eltex.lab14.feature.events.adapters.OffsetDecoration
 import com.eltex.lab14.feature.events.effecthandler.EventEffectHandler
 import com.eltex.lab14.feature.events.reducer.EventReducer
 import com.eltex.lab14.feature.events.repository.NetworkEventsRepository
@@ -23,13 +25,11 @@ import com.eltex.lab14.feature.events.ui.EventPagingMapper
 import com.eltex.lab14.feature.events.ui.EventUiModel
 import com.eltex.lab14.feature.events.ui.EventUiModelMapper
 import com.eltex.lab14.feature.events.viewmodel.EventMessage
+import com.eltex.lab14.feature.events.viewmodel.EventStatus
 import com.eltex.lab14.feature.events.viewmodel.EventStore
 import com.eltex.lab14.feature.events.viewmodel.EventUiState
 import com.eltex.lab14.feature.events.viewmodel.EventViewModel
 import com.eltex.lab14.feature.newevent.fragment.NewEventFragment
-import com.eltex.lab14.feature.events.adapters.EventAdapter
-import com.eltex.lab14.feature.events.adapters.OffsetDecoration
-import com.eltex.lab14.feature.events.viewmodel.EventStatus
 import com.eltex.lab14.util.getErrorText
 import com.eltex.lab14.utils.share
 import kotlinx.coroutines.flow.launchIn

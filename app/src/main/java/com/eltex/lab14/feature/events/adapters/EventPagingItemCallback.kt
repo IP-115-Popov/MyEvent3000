@@ -4,7 +4,7 @@ import androidx.recyclerview.widget.DiffUtil
 import com.eltex.lab14.feature.events.ui.EventPagingModel
 import com.eltex.lab14.presentation.ui.PagingModel
 
-class EventPagingItemCallback:  DiffUtil.ItemCallback<EventPagingModel>() {
+class EventPagingItemCallback : DiffUtil.ItemCallback<EventPagingModel>() {
     private val delegate = EventItemCallback()
 
     override fun areItemsTheSame(oldItem: EventPagingModel, newItem: EventPagingModel): Boolean {

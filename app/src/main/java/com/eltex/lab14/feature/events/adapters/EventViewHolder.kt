@@ -29,7 +29,7 @@ class EventViewHolder(val binding: CardEventBinding) : ViewHolder(binding.root) 
 
     private fun updateParticipate(participateByMe: Boolean) {
         binding.bthParticipate.text = if (participateByMe) "1" else "0"
-     }
+    }
 
     private fun updateLike(likedByMe: Boolean) {
         binding.bthLike.isSelected = likedByMe
