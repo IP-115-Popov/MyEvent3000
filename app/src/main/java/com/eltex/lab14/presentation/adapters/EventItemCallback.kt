@@ -1,30 +1,20 @@
 package com.eltex.lab14.presentation.adapters
 
 import androidx.recyclerview.widget.DiffUtil
+import com.eltex.lab14.feature.events.ui.EventUiModel
 
-class EventItemCallback : DiffUtil.ItemCallback<EventItem>() {
-    override fun areItemsTheSame(oldItem: EventItem, newItem: EventItem): Boolean {
-        return when {
-            oldItem is EventItem.Header && newItem is EventItem.Header -> oldItem.title == newItem.title
-            oldItem is EventItem.Event && newItem is EventItem.Event -> oldItem.event.id == newItem.event.id
-            else -> false
-        }
-    }
+class EventItemCallback : DiffUtil.ItemCallback<EventUiModel>() {
+    override fun areItemsTheSame(oldItem: EventUiModel, newItem: EventUiModel): Boolean =
+        oldItem.id == newItem.id
 
-    override fun areContentsTheSame(oldItem: EventItem, newItem: EventItem): Boolean {
-        return oldItem == newItem
-    }
+    override fun areContentsTheSame(oldItem: EventUiModel, newItem: EventUiModel): Boolean =
+        oldItem == newItem
 
-    override fun getChangePayload(oldItem: EventItem, newItem: EventItem): Any? {
-        return when {
-            oldItem is EventItem.Event && newItem is EventItem.Event -> {
-                EventPayload(likedByMe = newItem.event.likedByMe.takeIf { it != oldItem.event.likedByMe },
-                    participateByMe = newItem.event.participateByMe.takeIf { it != oldItem.event.participateByMe },
-                    likes = newItem.event.likes.takeIf { it != oldItem.event.likes }
-                ).takeIf { it.isNotEmpty() }
-            }
+    override fun getChangePayload(oldItem: EventUiModel, newItem: EventUiModel): Any? =
+        EventPayload(
+            likedByMe = newItem.likedByMe.takeIf { it != oldItem.likedByMe },
+            participateByMe = newItem.participateByMe.takeIf { it != oldItem.participateByMe },
+            likes = newItem.likes.takeIf { it != oldItem.likes }
+        ).takeIf { it.isNotEmpty() }
 
-            else -> null
-        }
-    }
 }

@@ -19,6 +19,7 @@ import com.eltex.lab14.databinding.FragmentPostBinding
 import com.eltex.lab14.feature.events.effecthandler.EventEffectHandler
 import com.eltex.lab14.feature.events.reducer.EventReducer
 import com.eltex.lab14.feature.events.repository.NetworkEventsRepository
+import com.eltex.lab14.feature.events.ui.EventPagingMapper
 import com.eltex.lab14.feature.events.ui.EventUiModel
 import com.eltex.lab14.feature.events.ui.EventUiModelMapper
 import com.eltex.lab14.feature.events.viewmodel.EventMessage
@@ -110,7 +111,7 @@ class EventFragment : Fragment() {
                     val itemsCount = adapter.itemCount
                     val adapterPosition = binding.recyclerView.getChildAdapterPosition(view)
 
-                    if (itemsCount - 3 == adapterPosition) {
+                    if (itemsCount - 3  == adapterPosition) {
                         viewModel.accept(EventMessage.LoadNextPage)
                     }
                 }
@@ -134,7 +135,7 @@ class EventFragment : Fragment() {
                 viewModel.accept(EventMessage.HandleError)
             }
 
-            adapter.submitEventList(state.events)
+            adapter.submitList(EventPagingMapper.map(state))
         }.launchIn(viewLifecycleOwner.lifecycleScope)
 
 

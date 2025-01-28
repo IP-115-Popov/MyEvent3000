@@ -8,12 +8,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.CardEventBinding
 import com.eltex.lab14.databinding.DataHederBinding
+import com.eltex.lab14.databinding.ItemErrorBinding
+import com.eltex.lab14.databinding.ItemProgressBinding
+import com.eltex.lab14.feature.events.ui.EventPagingModel
 import com.eltex.lab14.feature.events.ui.EventUiModel
 import com.eltex.lab14.presentation.animator.ButtonAnimator
+import com.eltex.lab14.presentation.ui.PagingModel
 
 class EventAdapter(
     private val listener: EventListener
-) : ListAdapter<EventItem, RecyclerView.ViewHolder>(EventItemCallback()) {
+) : ListAdapter<EventPagingModel, RecyclerView.ViewHolder>(EventPagingItemCallback()) {
 
     interface EventListener {
         fun likeClickListener(event: EventUiModel)
@@ -24,17 +28,11 @@ class EventAdapter(
         fun onUpdateClickListener(event: EventUiModel)
     }
 
-    private val HEADER_VIEW_TYPE = 0
-    private val ITEM_VIEW_TYPE = 1
-
-    fun submitEventList(events: List<EventUiModel>) {
-        val items =
-            events.groupBy { it.published } // Группируем по дате публикации (или любому другому признаку)
-        super.submitList(
-            items.flatMap { (publishedDate, eventList) ->
-                listOf(EventItem.Header(publishedDate)) + eventList.map(EventItem::Event)
-            }
-        )
+    private companion object {
+        private val HEADER_VIEW_TYPE = R.layout.fragment_event
+        private val ITEM_VIEW_TYPE = R.layout.item_error
+        private val LOADING_VIEW_TYPE = R.layout.card_event
+        private val ERROR_VIEW_TYPE = R.layout.card_event
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -51,15 +49,27 @@ class EventAdapter(
                 EventViewHolder(binding)
             }
 
-            else -> throw IllegalArgumentException("Unknown viewType")
+            LOADING_VIEW_TYPE -> {
+                val binding = ItemProgressBinding.inflate(layoutInflater, parent, false)
+                LoadingViewHolder(binding)
+            }
+
+            ERROR_VIEW_TYPE -> {
+                val binding = ItemErrorBinding.inflate(layoutInflater, parent, false)
+                ErrorViewHolder(binding)
+            }
+
+            else -> error("Unknown viewType: $viewType")
         }
     }
 
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is EventItem.Header -> HEADER_VIEW_TYPE
-            is EventItem.Event -> ITEM_VIEW_TYPE
+            is PagingModel.Data -> ITEM_VIEW_TYPE
+            is PagingModel.Error -> ERROR_VIEW_TYPE
+            is PagingModel.Header -> HEADER_VIEW_TYPE
+            PagingModel.Loading -> LOADING_VIEW_TYPE
         }
     }
 
@@ -83,9 +93,9 @@ class EventAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (val item = getItem(position)) {
-            is EventItem.Event -> {
+            is PagingModel.Data -> {
                 val eventViewHolder = holder as EventViewHolder
-                val event = item.event // Получаем сам объект Event
+                val event = item.value // Получаем сам объект Event
                 eventViewHolder.bind(event)
 
                 // Устанавливаем обработчики кликов в onBindViewHolder
@@ -127,15 +137,9 @@ class EventAdapter(
                 }
             }
 
-            is EventItem.Header -> {
-                val headerViewHolder = holder as HeaderViewHolder
-                headerViewHolder.bind(item.title)
-            }
+            is PagingModel.Header -> (holder as HeaderViewHolder).bind(item.title)
+            is PagingModel.Error -> (holder as ErrorViewHolder).bind(item.error)
+            PagingModel.Loading -> holder as LoadingViewHolder
         }
     }
-}
-
-sealed class EventItem {
-    data class Header(val title: String) : EventItem()
-    data class Event(val event: EventUiModel) : EventItem()
 }
