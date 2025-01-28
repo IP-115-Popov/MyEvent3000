@@ -1,4 +1,4 @@
-package com.eltex.lab14.presentation.adapters
+package com.eltex.lab14.feature.events.adapters
 
 import androidx.recyclerview.widget.RecyclerView
 import com.eltex.lab14.databinding.ItemErrorBinding

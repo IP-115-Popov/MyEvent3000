@@ -27,8 +27,8 @@ import com.eltex.lab14.feature.events.viewmodel.EventStore
 import com.eltex.lab14.feature.events.viewmodel.EventUiState
 import com.eltex.lab14.feature.events.viewmodel.EventViewModel
 import com.eltex.lab14.feature.newevent.fragment.NewEventFragment
-import com.eltex.lab14.presentation.adapters.EventAdapter
-import com.eltex.lab14.presentation.adapters.OffsetDecoration
+import com.eltex.lab14.feature.events.adapters.EventAdapter
+import com.eltex.lab14.feature.events.adapters.OffsetDecoration
 import com.eltex.lab14.util.getErrorText
 import com.eltex.lab14.utils.share
 import kotlinx.coroutines.flow.launchIn
