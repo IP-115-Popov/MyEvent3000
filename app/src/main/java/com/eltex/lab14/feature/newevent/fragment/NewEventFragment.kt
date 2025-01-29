@@ -65,7 +65,7 @@ class NewEventFragment : Fragment() {
                     NewEventViewModel::class
                 ) {
                     NewEventViewModel(
-                        NetworkEventsRepository(), postId
+                        NetworkEventsRepository(requireContext().applicationContext), postId
                     )
                 }
             }

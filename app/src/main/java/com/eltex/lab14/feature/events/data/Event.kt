@@ -1,5 +1,6 @@
 package com.eltex.lab14.feature.events.data
 
+import com.eltex.lab14.feature.media.Attachment
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import java.time.Instant
@@ -19,4 +20,7 @@ data class Event(
     @SerialName("participateByMe") val participateByMe: Boolean = false,
 
     @SerialName("likeOwnerIds") val likeOwnerIds: Set<Long> = emptySet(),
+
+    @SerialName("attachment")
+    val attachment: Attachment? = null
 )

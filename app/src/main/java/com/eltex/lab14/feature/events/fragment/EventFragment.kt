@@ -50,7 +50,7 @@ class EventFragment : Fragment() {
                     EventViewModel(
                         EventStore(
                             EventReducer(), EventEffectHandler(
-                                NetworkEventsRepository(), EventUiModelMapper()
+                                NetworkEventsRepository(requireContext().applicationContext), EventUiModelMapper()
                             ), setOf(EventMessage.Refresh), EventUiState()
                         )
                     )

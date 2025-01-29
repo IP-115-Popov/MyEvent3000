@@ -1,6 +1,7 @@
 package com.eltex.lab14.feature.events.repository
 
 import com.eltex.lab14.feature.events.data.Event
+import com.eltex.lab14.feature.newevent.viewmodel.FileModel
 
 interface EventRepository {
 
@@ -18,7 +19,7 @@ interface EventRepository {
 
     suspend fun deleteParticipateById(id: Long): Event
 
-    suspend fun save(id: Long, content: String): Event
+    suspend fun save(id: Long, content: String, fileModel: FileModel?): Event
 
     suspend fun deleteById(id: Long)
 }
