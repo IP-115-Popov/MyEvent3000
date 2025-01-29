@@ -164,5 +164,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             tools:text="2" />
 
+        <ImageView
+            android:id="@+id/attachment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"/>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>

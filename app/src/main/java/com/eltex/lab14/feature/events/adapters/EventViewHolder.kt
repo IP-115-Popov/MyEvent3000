@@ -1,6 +1,8 @@
 package com.eltex.lab14.feature.events.adapters
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import com.bumptech.glide.Glide
+import com.eltex.lab14.R
 import com.eltex.lab14.databinding.CardEventBinding
 import com.eltex.lab14.feature.events.ui.EventUiModel
 
@@ -13,6 +15,15 @@ class EventViewHolder(val binding: CardEventBinding) : ViewHolder(binding.root) 
         updateParticipate(event.participateByMe)
         updateLike(event.likedByMe)
         binding.bthLike.text = event.likes.toString()
+
+        Glide.with(binding.root)
+            .load(event.authorAvatar)
+            .placeholder(R.drawable.avatar_background)
+            .into(binding.imvAvatar)
+
+        Glide.with(binding.root)
+            .load(event.attachment?.url)
+            .into(binding.attachment)
     }
 
     fun bind(payload: EventPayload) {

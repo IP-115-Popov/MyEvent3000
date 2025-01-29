@@ -14,12 +14,14 @@ class EventUiModelMapper {
         EventUiModel(
             id,
             author,
+            authorAvatar = authorAvatar,
             content,
             published = FORMATTER.format(published.atZone(ZoneId.systemDefault())),
             datetime = FORMATTER.format(datetime.atZone(ZoneId.systemDefault())),
             likedByMe,
             participateByMe,
-            likes = likeOwnerIds.size
+            likes = likeOwnerIds.size,
+            attachment = attachment,
         )
     }
 }
