@@ -27,4 +27,7 @@
     <string name="retry">Retry</string>
     <string name="network_error">Network Error</string>
     <string name="unknown_error">Unknown error</string>
+    <string name="new_event_hint">Content</string>
+    <string name="remove">Remove</string>
+    <string name="photo_preview">Photo preview</string>
 </resources>

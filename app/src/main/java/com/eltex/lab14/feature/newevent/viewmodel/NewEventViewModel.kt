@@ -33,6 +33,10 @@ class NewEventViewModel(
 
     }
 
+    fun saveAttachment(file: FileModel?) {
+        _state.update { it.copy(file = file) }
+    }
+
     fun consumeError() {
         _state.update { it.copy(status = Status.Idle) }
     }
