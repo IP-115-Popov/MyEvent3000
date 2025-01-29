@@ -2,6 +2,7 @@ package com.eltex.lab14.feature.events.adapters
 
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CircleCrop
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.CardEventBinding
 import com.eltex.lab14.feature.events.ui.EventUiModel
@@ -19,6 +20,7 @@ class EventViewHolder(val binding: CardEventBinding) : ViewHolder(binding.root) 
         Glide.with(binding.root)
             .load(event.authorAvatar)
             .placeholder(R.drawable.avatar_background)
+            .transform(CircleCrop())
             .into(binding.imvAvatar)
 
         Glide.with(binding.root)
