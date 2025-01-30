@@ -20,13 +20,11 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import com.eltex.lab14.BuildConfig
 import com.eltex.lab14.R
 import com.eltex.lab14.databinding.FragmentNewPostBinding
 import com.eltex.lab14.feature.events.data.AttachmentType
-import com.eltex.lab14.feature.events.repository.NetworkEventsRepository
 import com.eltex.lab14.feature.newevent.viewmodel.FileModel
 import com.eltex.lab14.feature.newevent.viewmodel.NewEventViewModel
 import com.eltex.lab14.feature.toolbar.viewmodel.ToolbarViewModel
@@ -61,8 +59,7 @@ class NewEventFragment : Fragment() {
 
         val newEventViewModel by viewModels<NewEventViewModel>(
             extrasProducer = {
-                defaultViewModelCreationExtras.withCreationCallback<NewEventViewModel.ViewModelFactory> {
-                    factory ->
+                defaultViewModelCreationExtras.withCreationCallback<NewEventViewModel.ViewModelFactory> { factory ->
                     factory.create(postId)
                 }
             }
@@ -70,17 +67,19 @@ class NewEventFragment : Fragment() {
 
         val photoUri = getPhotoUri()
 
-        val takePictureContract = registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
-            if (success) {
-                newEventViewModel.saveAttachment(FileModel(photoUri, AttachmentType.IMAGE))
+        val takePictureContract =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { success ->
+                if (success) {
+                    newEventViewModel.saveAttachment(FileModel(photoUri, AttachmentType.IMAGE))
+                }
             }
-        }
 
-        val galleryContract = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
-           uri?.let {
-               newEventViewModel.saveAttachment(FileModel(it, AttachmentType.IMAGE))
-           }
-        }
+        val galleryContract =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+                uri?.let {
+                    newEventViewModel.saveAttachment(FileModel(it, AttachmentType.IMAGE))
+                }
+            }
 
         toolbarViewModel.saveClicked.filter { it }.onEach {
             val content = binding.etvContent.text?.toString().orEmpty()
@@ -156,7 +155,7 @@ class NewEventFragment : Fragment() {
 
     private fun getPhotoUri(): Uri {
         val directory = requireContext().cacheDir.resolve("file_picker").apply {
-                mkdirs()
+            mkdirs()
         }
 
         val file = directory.resolve("image.png")

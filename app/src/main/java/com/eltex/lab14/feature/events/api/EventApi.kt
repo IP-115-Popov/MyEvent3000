@@ -1,7 +1,6 @@
 package com.eltex.lab14.feature.events.api
 
 import com.eltex.lab14.feature.events.data.Event
-import retrofit2.create
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET

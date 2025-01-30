@@ -1,7 +1,6 @@
 package com.eltex.lab14.feature.events.repository
 
 import android.content.ContentResolver
-import android.content.Context
 import com.eltex.lab14.feature.events.api.EventApi
 import com.eltex.lab14.feature.events.data.AttachmentType
 import com.eltex.lab14.feature.events.data.Event
@@ -35,7 +34,7 @@ class NetworkEventsRepository @Inject constructor(
     override suspend fun deleteParticipateById(id: Long): Event =
         eventApi.deleteParticipateById(id)
 
-    override suspend fun save(id: Long, content: String,  fileModel: FileModel?): Event {
+    override suspend fun save(id: Long, content: String, fileModel: FileModel?): Event {
         val event = fileModel?.let {
             val media = uploadMedia(it)
             Event(
@@ -45,10 +44,10 @@ class NetworkEventsRepository @Inject constructor(
                 attachment = Attachment(media.url, AttachmentType.IMAGE)
             )
         } ?: Event(
-                id = id,
-                content = content,
-                datetime = Instant.now(),
-            )
+            id = id,
+            content = content,
+            datetime = Instant.now(),
+        )
 
         return eventApi.savEvent(event)
     }
