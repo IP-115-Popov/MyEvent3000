@@ -32,14 +32,14 @@ import com.eltex.lab14.feature.newevent.viewmodel.NewEventViewModel
 import com.eltex.lab14.feature.toolbar.viewmodel.ToolbarViewModel
 import com.eltex.lab14.util.getErrorText
 import com.eltex.lab14.utils.toast
+import dagger.hilt.android.AndroidEntryPoint
+import dagger.hilt.android.lifecycle.withCreationCallback
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
-
+@AndroidEntryPoint
 class NewEventFragment : Fragment() {
-
-
     companion object {
         const val POST_ID = "POST_ID"
         const val CONTENT = "CONTENT"
@@ -59,17 +59,14 @@ class NewEventFragment : Fragment() {
 
         binding.etvContent.setText(content)
 
-        val newEventViewModel by viewModels<NewEventViewModel> {
-            viewModelFactory {
-                addInitializer(
-                    NewEventViewModel::class
-                ) {
-                    NewEventViewModel(
-                        NetworkEventsRepository(requireContext().applicationContext), postId
-                    )
+        val newEventViewModel by viewModels<NewEventViewModel>(
+            extrasProducer = {
+                defaultViewModelCreationExtras.withCreationCallback<NewEventViewModel.ViewModelFactory> {
+                    factory ->
+                    factory.create(postId)
                 }
             }
-        }
+        )
 
         val photoUri = getPhotoUri()
 

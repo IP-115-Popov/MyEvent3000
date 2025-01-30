@@ -32,9 +32,11 @@ import com.eltex.lab14.feature.newevent.fragment.NewEventFragment
 import com.eltex.lab14.util.getErrorText
 import com.eltex.lab14.utils.loadMoreOnScroll
 import com.eltex.lab14.utils.share
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@AndroidEntryPoint
 class EventFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -44,19 +46,7 @@ class EventFragment : Fragment() {
 
         val skeleton = binding.skeletonViewController
 
-        val viewModel by viewModels<EventViewModel> {
-            viewModelFactory {
-                addInitializer(EventViewModel::class) {
-                    EventViewModel(
-                        EventStore(
-                            EventReducer(), EventEffectHandler(
-                                NetworkEventsRepository(requireContext().applicationContext), EventUiModelMapper()
-                            ), setOf(EventMessage.Refresh), EventUiState()
-                        )
-                    )
-                }
-            }
-        }
+        val viewModel by viewModels<EventViewModel>()
 
         requireActivity().supportFragmentManager.setFragmentResultListener(
             NewEventFragment.POST_CREATED_KEY, viewLifecycleOwner

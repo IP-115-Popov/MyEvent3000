@@ -3,8 +3,9 @@ package com.eltex.lab14.feature.events.ui
 import com.eltex.lab14.feature.events.data.Event
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
 
-class EventUiModelMapper {
+class EventUiModelMapper @Inject constructor() {
 
     private companion object {
         val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm")

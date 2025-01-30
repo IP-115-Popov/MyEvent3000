@@ -12,10 +12,4 @@ interface MediaApi {
     @Multipart
     @POST("api/media")
     suspend fun uploadMedia(@Part file: MultipartBody.Part): MediaDto
-
-    companion object {
-        val INSTANCE by lazy {
-            RetrofitFactory.INSTANCE.create<MediaApi>()
-        }
-    }
 }

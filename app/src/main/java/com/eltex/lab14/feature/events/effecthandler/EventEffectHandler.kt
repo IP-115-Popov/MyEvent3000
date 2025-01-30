@@ -15,9 +15,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.merge
+import javax.inject.Inject
 
-class EventEffectHandler(
-    private val repository: EventRepository, private val eventMapper: EventUiModelMapper
+class EventEffectHandler @Inject constructor(
+    private val repository: EventRepository,
+    private val eventMapper: EventUiModelMapper,
 ) : EffectHandler<EventEffect, EventMessage> {
     override fun connect(effects: Flow<EventEffect>): Flow<EventMessage> = listOf(
         handleNextPage(effects),

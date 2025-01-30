@@ -37,10 +37,4 @@ interface EventApi {
     @DELETE("api/events/{id}")
     suspend fun deleteById(@Path("id") id: Long)
 
-
-    companion object {
-        val INSTANCE: EventApi by lazy {
-            RetrofitFactory.INSTANCE.create()
-        }
-    }
 }
