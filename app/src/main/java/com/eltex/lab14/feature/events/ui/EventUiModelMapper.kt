@@ -5,20 +5,17 @@ import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
-class EventUiModelMapper @Inject constructor() {
-
-    private companion object {
-        val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yy HH:mm")
-    }
-
+class EventUiModelMapper @Inject constructor(
+    private val instantToStringConverter: InstantToStringConverter
+) {
     fun map(event: Event): EventUiModel = with(event) {
         EventUiModel(
             id,
             author,
             authorAvatar = authorAvatar,
             content,
-            published = FORMATTER.format(published.atZone(ZoneId.systemDefault())),
-            datetime = FORMATTER.format(datetime.atZone(ZoneId.systemDefault())),
+            published = instantToStringConverter.Convert(published),
+            datetime = instantToStringConverter.Convert(published),
             likedByMe,
             participateByMe,
             likes = likeOwnerIds.size,
